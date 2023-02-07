@@ -7,7 +7,11 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.WindowDecorActionBar
 import androidx.core.view.WindowCompat
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.SnackbarContentLayout
 import com.google.android.material.textfield.TextInputEditText
+import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
@@ -15,50 +19,38 @@ class MainActivity : AppCompatActivity() {
         private val TAG = MainActivity::class.qualifiedName
     }
 
-    //GUI variables
-    private lateinit var scooterName: TextInputEditText
-    private lateinit var scooterLocation: TextInputEditText
-    private lateinit var startRideButton: Button
-
-
+    private lateinit var binding: ActivityMainBinding
 
     private val scooter: Scooter = Scooter("","")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-
-        //Edit texts
-        scooterName = findViewById(R.id.nameTextFieldEdit)
-        scooterLocation = findViewById(R.id.locationTextFieldEdit)
-
-        //Buttons
-        startRideButton = findViewById(R.id.startRide_button)
 
         //Action
-        startRideButton.setOnClickListener {
-            if(scooterName.text?.isNotEmpty() == true && scooterLocation.text?.isNotEmpty() == true){
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        with(binding) {
+            startRideButton.setOnClickListener{
+                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
 
-                //Update the scooter attributes
+                    //Update the scooter attributes
 
-                val name = scooterName.text.toString().trim()
-                val location = scooterLocation.text.toString().trim()
-                //set the name and location of the given values
-                scooter.setName(name)
-                scooter.setLocation(location)
+                    val name = nameTextFieldEdit.text.toString().trim()
+                    val location = locationTextFieldEdit.text.toString().trim()
+                    //set the name and location of the given values
+                    scooter.name = name
+                    scooter.location = location
 
-                //show text in log
-                scooterName.setText(" ")
-                scooterLocation.setText(" ")
-                showMessage()
-
+                    //show text in log
+                    nameTextFieldEdit.setText("")
+                    locationTextFieldEdit.setText("")
+                    showMessage()
+                }
             }
-
         }
     }
-
     private fun showMessage() {
-        Log.d(TAG, scooter.toString())
+        Snackbar.make(binding.root, scooter.toString(), Snackbar.LENGTH_SHORT).show();
     }
 }
