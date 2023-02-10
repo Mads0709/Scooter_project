@@ -21,10 +21,22 @@
  * SOFTWARE.
  */
 
+
+
 package dk.itu.moapd.scootersharing.mgan
 
+/**
+ * An data class that holds twp properties
+ * @property name
+ * @property location
+ */
 data class Scooter (var name : String,
                     var location: String) {
+
+    /**
+     * A method that returns the scooter name and location
+     * @return a string representation of the name and location
+     */
     override fun toString(): String {
         return "[Scooter] $name is placed at $location."
     }
