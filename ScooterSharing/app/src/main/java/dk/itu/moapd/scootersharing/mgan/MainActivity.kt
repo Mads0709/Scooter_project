@@ -36,14 +36,26 @@ import com.google.android.material.snackbar.SnackbarContentLayout
 import com.google.android.material.textfield.TextInputEditText
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 
+/**
+ * An activity class with methods to manage the main activity of the ScooterSharing application.
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object{
         private val TAG = MainActivity::class.qualifiedName
     }
 
+    /**
+    * View binding is a feature that allows you to more easily write code that interacts with
+    * views. Once view binding is enabled in a module, it generates a binding class for each XML
+    * layout file present in that module. An instance of a binding class contains direct references
+    * to all views that have an ID in the corresponding layout.
+    */
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * A 'Scooter' to store the scooter information
+     */
     private val scooter: Scooter = Scooter("","")
 
     override fun onCreate(savedInstanceState: Bundle?) {
