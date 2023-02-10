@@ -85,6 +85,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    /**
+     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
+     */
     private fun showMessage() {
         Snackbar.make(binding.root, scooter.toString(), Snackbar.LENGTH_SHORT).show();
     }

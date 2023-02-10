@@ -5,45 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="31a708c1-b4a6-4cae-bfdb-7e1175bc2cce" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/.idea/compiler.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/proguard-rules.pro" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/androidTest/java/dk/itu/moapd/scootersharing/mgan/ExampleInstrumentedTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/AndroidManifest.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/java/dk/itu/moapd/scootersharing/mgan/Scooter.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ScooterSharing/app/src/main/java/dk/itu/moapd/scootersharing/mgan/Scooter.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/drawable/ic_launcher_background.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-anydpi-v33/ic_launcher.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-hdpi/ic_launcher.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-hdpi/ic_launcher_round.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-mdpi/ic_launcher.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-mdpi/ic_launcher_round.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xhdpi/ic_launcher.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xhdpi/ic_launcher_round.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xxhdpi/ic_launcher.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xxhdpi/ic_launcher_round.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/mipmap-xxxhdpi/ic_launcher_round.webp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/values-night/themes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/values/colors.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/values/strings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/values/themes.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/xml/backup_rules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/res/xml/data_extraction_rules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/test/java/dk/itu/moapd/scootersharing/mgan/ExampleUnitTest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/build.gradle" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/gradle.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/gradle/wrapper/gradle-wrapper.jar" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/gradle/wrapper/gradle-wrapper.properties" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/gradlew" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/gradlew.bat" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/ScooterSharing/settings.gradle" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ScooterSharing/app/src/main/java/dk/itu/moapd/scootersharing/mgan/MainActivity.kt" beforeDir="false" afterPath="$PROJECT_DIR$/ScooterSharing/app/src/main/java/dk/itu/moapd/scootersharing/mgan/MainActivity.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
