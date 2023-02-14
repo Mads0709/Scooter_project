@@ -21,6 +21,10 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.Date
+
 /**
  * An data class that holds twp properties
  * @property name
@@ -28,14 +32,20 @@ package dk.itu.moapd.scootersharing.mgan
  */
 data class Scooter (var name : String,
                     var location: String,
-                    var timestamp: Long = System.currentTimeMillis())
-    {
+                    var timestamp: Long = System.currentTimeMillis()) {
 
     /**
      * A method that returns the scooter name and location
      * @return a string representation of the name and location
      */
     override fun toString(): String {
-        return "[Scooter] $name is placed at $location the timestamp is: $timestamp ."
+        return "[Scooter] $name is placed at $location the timestamp is:." + toDate()
+    }
+
+    fun toDate (): String {
+        var date2 = SimpleDateFormat("dd/MM/yy hh:mm a")
+        val netDate = Date(this.timestamp)
+        val date = date2.format(netDate)
+        return date
     }
 }
