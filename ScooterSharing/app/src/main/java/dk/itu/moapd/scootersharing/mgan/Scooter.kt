@@ -27,13 +27,15 @@ package dk.itu.moapd.scootersharing.mgan
  * @property location
  */
 data class Scooter (var name : String,
-                    var location: String) {
+                    var location: String,
+                    var timestamp: Long = System.currentTimeMillis())
+    {
 
     /**
      * A method that returns the scooter name and location
      * @return a string representation of the name and location
      */
     override fun toString(): String {
-        return "[Scooter] $name is placed at $location."
+        return "[Scooter] $name is placed at $location the timestamp is: $timestamp ."
     }
 }
