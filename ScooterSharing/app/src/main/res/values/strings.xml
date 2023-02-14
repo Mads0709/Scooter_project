@@ -1,6 +1,16 @@
 <resources>
+    <!--title-->
     <string name="app_name">ScooterSharing</string>
-    <string name="name_text">Enter scooter name</string>
-    <string name="location_text">Enter your location</string>
-    <string name="start_button">Start ride</string>
+
+    <!-- for starting the ride-->
+    <string name="start_ride_name_text">Enter scooter name</string>
+    <string name="start_ride_location_text">Enter your location</string>
+    <string name="start_ride_button">Start ride</string>
+
+    <!-- for updating the ride-->
+    <string name="update_ride_name_text">The current scooter name</string>
+    <string name="update_ride_location_text">The current scooter location</string>
+    <string name="update_ride_button">Update ride</string>
+
+
 </resources>
