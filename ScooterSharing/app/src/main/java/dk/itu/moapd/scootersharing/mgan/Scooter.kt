@@ -31,7 +31,7 @@ import java.util.Date
  * @property location
  * @property timestamp
  */
-data class Scooter (val name : String,
+data class Scooter (var name : String,
                     var location: String,
                     var timestamp: Long = System.currentTimeMillis()) {
 
