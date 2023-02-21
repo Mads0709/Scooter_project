@@ -11,6 +11,6 @@
     <string name="update_ride_name_text">The current scooter name</string>
     <string name="update_ride_location_text">The current scooter location</string>
     <string name="update_ride_button">Update ride</string>
-
+    <string name="list_rides_title">Scooters</string>
 
 </resources>
