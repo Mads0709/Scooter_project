@@ -41,7 +41,7 @@ import dk.itu.moapd.scootersharing.mgan.databinding.ActivityUpdateRideBinding
 class UpdateRideActivity : AppCompatActivity() {
 
     companion object{
-        private val TAG = MainActivity::class.qualifiedName
+        lateinit var ridesDB : RidesDB
     }
 
     /**
@@ -78,7 +78,7 @@ class UpdateRideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-
+        ridesDB = RidesDB.get(this)
         //Action
         binding = ActivityUpdateRideBinding.inflate(layoutInflater)
         setContentView(binding.root)
