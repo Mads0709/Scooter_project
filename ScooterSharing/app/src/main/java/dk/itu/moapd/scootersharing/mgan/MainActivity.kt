@@ -43,6 +43,7 @@ class MainActivity : AppCompatActivity() {
 
     companion object{
         lateinit var ridesDB : RidesDB
+        private lateinit var adapter: CustomArrayAdapter
     }
 
     /**
@@ -80,9 +81,13 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         ridesDB = RidesDB.get(this)
+        val data = ridesDB.getRidesList()
 
+        //Create the custom adapter to populate the adapter
+        adapter = CustomArrayAdapter(this, R.layout.list_rides,data)
         //Action
         binding = ActivityMainBinding.inflate(layoutInflater)
+        binding.listView.adapter = adapter
         with (binding){
             //start ride button
             mainStartRideButton.setOnClickListener{
