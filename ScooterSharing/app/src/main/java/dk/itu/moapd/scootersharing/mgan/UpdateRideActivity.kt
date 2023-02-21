@@ -98,6 +98,8 @@ class UpdateRideActivity : AppCompatActivity() {
                     nameTextFieldEdit.setText("")
                     locationTextFieldEdit.setText("")
                     showMessage()
+                } else if (nameTextFieldEdit.text?.isNotEmpty() == false && locationTextFieldEdit.text?.isNotEmpty() == true) {
+                    showMessage()
                 }
             }
         }
