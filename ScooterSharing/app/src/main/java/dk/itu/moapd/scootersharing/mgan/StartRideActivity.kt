@@ -93,8 +93,7 @@ class StartRideActivity : AppCompatActivity() {
                     val name = nameTextFieldEdit.text.toString().trim()
                     val location = locationTextFieldEdit.text.toString().trim()
                     //set the name and location of the given values
-                    scooter.name = name
-                    scooter.location = location
+                    ridesDB.addScooter(name,location)
 
                     //show text in log
                     nameTextFieldEdit.setText("")
@@ -109,6 +108,6 @@ class StartRideActivity : AppCompatActivity() {
      * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
      */
     private fun showMessage() {
-        Snackbar.make(binding.root, scooter.toString(), Snackbar.LENGTH_SHORT).show();
+        Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
     }
 }

@@ -91,7 +91,7 @@ class UpdateRideActivity : AppCompatActivity() {
                     val name = nameTextFieldEdit.text.toString().trim()
                     val location = locationTextFieldEdit.text.toString().trim()
                     //set the name and location of the given values
-                    scooter.name = name
+                    //scooter.name = name
                     scooter.location = location
 
                     //show text in log
