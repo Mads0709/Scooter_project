@@ -83,6 +83,7 @@ class MainActivity : AppCompatActivity() {
         ridesDB = RidesDB.get(this)
         val data = ridesDB.getRidesList()
 
+
         //Create the custom adapter to populate the adapter
         adapter = CustomArrayAdapter(this, R.layout.list_rides,data)
         //Action
@@ -106,8 +107,5 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
-     */
 
 }
