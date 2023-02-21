@@ -81,8 +81,8 @@ class MainActivity : AppCompatActivity() {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         ridesDB = RidesDB.get(this)
-        val data = ridesDB.getRidesList()
 
+        val data = ridesDB.getRidesList()
 
         //Create the custom adapter to populate the adapter
         adapter = CustomArrayAdapter(this, R.layout.list_rides,data)
@@ -104,8 +104,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(binding.root)
 
-
     }
+
+
+
 
 
 }
