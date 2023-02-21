@@ -26,11 +26,12 @@ import java.text.SimpleDateFormat
 import java.util.Date
 
 /**
- * An data class that holds twp properties
- * @property name
+ * An data class that holds three properties
+ * @property name readonly
  * @property location
+ * @property timestamp
  */
-data class Scooter (var name : String,
+data class Scooter (val name : String,
                     var location: String,
                     var timestamp: Long = System.currentTimeMillis()) {
 
@@ -42,6 +43,10 @@ data class Scooter (var name : String,
         return "[Scooter] $name is placed at $location the timestamp is:." + toDate()
     }
 
+    /**
+     * A function that converts a Date format to a SimpleDateFormat
+     * @return a string representation of a simple date format
+     */
     fun toDate (): String {
         var date2 = SimpleDateFormat("dd/MM/yy hh:mm a")
         val netDate = Date(this.timestamp)
