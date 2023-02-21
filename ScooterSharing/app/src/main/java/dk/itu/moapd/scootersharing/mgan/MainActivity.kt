@@ -106,6 +106,8 @@ class MainActivity : AppCompatActivity() {
 
 
     }
-
-
+    override fun onRestart() {
+        super.onRestart()
+        adapter.notifyDataSetChanged()
+    }
 }
