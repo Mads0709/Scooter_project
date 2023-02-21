@@ -22,10 +22,10 @@ class RidesDB private constructor ( context : Context) {
         rides.add(Scooter(name, location))
     }
     fun updateCurrentScooter ( location : String ) {
-        rides.first().location = location
+        rides.last().location = location
     }
     fun getCurrentScooter () : Scooter {
-        return rides.first()
+        return rides.last()
     }
     fun getCurrentScooterInfo () : String {
         return getCurrentScooter().toString()
