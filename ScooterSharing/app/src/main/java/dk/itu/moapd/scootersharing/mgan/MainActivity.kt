@@ -24,27 +24,13 @@ package dk.itu.moapd.scootersharing.mgan
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import androidx.appcompat.app.WindowDecorActionBar
 import androidx.core.view.WindowCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
-import com.google.android.material.textfield.TextInputEditText
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
-import dk.itu.moapd.scootersharing.mgan.databinding.ActivityStartRideBinding
 
 /**
  * An activity class with methods to manage the main activity of the ScooterSharing application.
  */
 class MainActivity : AppCompatActivity() {
-
-    companion object{
-        lateinit var ridesDB : RidesDB
-        private lateinit var adapter: CustomArrayAdapter
-    }
 
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
@@ -57,7 +43,7 @@ class MainActivity : AppCompatActivity() {
     /**
      * A 'Scooter' to store the scooter information
      */
-    private val scooter: Scooter = Scooter("","")
+
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling
@@ -80,35 +66,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        ridesDB = RidesDB.get(this)
-
-        val data = ridesDB.getRidesList()
-
-        //Create the custom adapter to populate the adapter
-        adapter = CustomArrayAdapter(this, R.layout.list_rides,data)
-        //Action
         binding = ActivityMainBinding.inflate(layoutInflater)
-        binding.listView.adapter = adapter
-        with (binding){
-            //start ride button
-            mainStartRideButton.setOnClickListener{
-                val intent = Intent(baseContext, StartRideActivity::class.java)
-                startActivity(intent)
-            }
-
-            mainUpdateRideButton.setOnClickListener{
-                val intent = Intent(baseContext, UpdateRideActivity::class.java)
-                startActivity(intent)
-            }
-        }
-
         setContentView(binding.root)
 
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        adapter.notifyDataSetChanged()
-    }
 
 }

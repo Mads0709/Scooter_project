@@ -47,7 +47,7 @@ class RidesDB private constructor ( context : Context) {
 open class RidesDBHolder < out T : Any , in A >( creator : ( A ) -> T ) {
     private var creator : (( A ) -> T ) ? = creator
     @Volatile private var instance : T ? = null
-    fun get ( arg : A ) : T {
+    fun get (arg: A) : T {
         val checkInstance = instance
         if ( checkInstance != null )
             return checkInstance

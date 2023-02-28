@@ -6,7 +6,7 @@
     <string name="start_ride_name_text">Enter scooter name</string>
     <string name="start_ride_location_text">Enter your location</string>
     <string name="start_ride_button">Start ride</string>
-
+    <string name="show_list_button">Show scooters</string>
     <!-- for updating the ride-->
     <string name="update_ride_name_text">The current scooter name</string>
     <string name="update_ride_location_text">The current scooter location</string>

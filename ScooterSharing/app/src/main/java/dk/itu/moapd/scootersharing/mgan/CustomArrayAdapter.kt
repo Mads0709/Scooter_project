@@ -7,8 +7,9 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
 
-class CustomArrayAdapter(context: Context, private var resource: Int,
-                         data: List<Scooter>) :
+class CustomArrayAdapter(
+    context: Context, private var resource: Int,
+    data: List<Scooter>) :
     ArrayAdapter<Scooter>(context, R.layout.list_rides, data) {
     private class ViewHolder(view: View) {
         val name: TextView = view.findViewById(R.id.list_item_name)

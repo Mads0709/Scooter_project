@@ -21,19 +21,10 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
-import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import androidx.appcompat.app.WindowDecorActionBar
 import androidx.core.view.WindowCompat
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.snackbar.SnackbarContentLayout
-import com.google.android.material.textfield.TextInputEditText
-import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityUpdateRideBinding
 
 /**
