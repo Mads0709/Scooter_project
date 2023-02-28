@@ -21,6 +21,7 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
+import android.nfc.Tag
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -82,21 +83,24 @@ class UpdateRideActivity : AppCompatActivity() {
         //Action
         binding = ActivityUpdateRideBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        with(binding) {
+        binding.apply {
+            //keeps the name of the current scootername in the textfield
+            nameTextFieldEdit.setText(ridesDB.getCurrentScooter().name)
+
             updateRideButton.setOnClickListener{
                 if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
 
                     //Update the scooter attributes
-
-                    val name = nameTextFieldEdit.text.toString().trim()
                     val location = locationTextFieldEdit.text.toString().trim()
                     //set the name and location of the given values
-                    ridesDB.addScooter(name, location)
-
+                    //ridesDB.addScooter(name, location)
                     //reset textfield after adding scotter
+                    ridesDB.updateCurrentScooter(location) //virker ikke lige nu
                     nameTextFieldEdit.setText("")
                     locationTextFieldEdit.setText("")
                     showMessage()
+
+
                 } else if (nameTextFieldEdit.text?.isNotEmpty() == false && locationTextFieldEdit.text?.isNotEmpty() == true) {
                     showMessage()
                 }
