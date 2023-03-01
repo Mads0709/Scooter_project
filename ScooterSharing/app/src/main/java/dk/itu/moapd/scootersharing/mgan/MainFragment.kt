@@ -124,13 +124,4 @@ class MainFragment : Fragment() {
                 }
             }
         }
-
-    /*override fun onRestart() {
-        super.onRestart()
-        adapter.notifyDataSetChanged()
-    }
-    */
-
-
-
 }
