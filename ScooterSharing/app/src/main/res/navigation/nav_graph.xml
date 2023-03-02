@@ -7,5 +7,14 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="dk.itu.moapd.scootersharing.mgan.MainFragment"
-        android:label="MainFragment" />
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_startRideFragment"
+            app:destination="@id/startRideFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/startRideFragment"
+        android:name="dk.itu.moapd.scootersharing.mgan.StartRideFragment"
+        android:label="StartRideFragment"/>
 </navigation>

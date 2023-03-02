@@ -23,22 +23,33 @@ package dk.itu.moapd.scootersharing.mgan
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import androidx.core.view.WindowCompat
+import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import dk.itu.moapd.scootersharing.mgan.databinding.ActivityStartRideBinding
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
 
 /**
  * An activity class with methods to manage the main activity of the ScooterSharing application.
  */
-class StartRideActivity : AppCompatActivity() {
+class StartRideFragment : Fragment() {
+
+    companion object{
+        lateinit var ridesDB : RidesDB
+    }
+    private var _binding: FragmentStartRideBinding? = null
+    private val binding
+        get() = checkNotNull(_binding)
+
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
      * views. Once view binding is enabled in a module, it generates a binding class for each XML
      * layout file present in that module. An instance of a binding class contains direct references
      * to all views that have an ID in the corresponding layout.
      */
-    private lateinit var binding: ActivityStartRideBinding
-
 
     /**
      * Called when the activity is starting. This is where most initialization should go: calling
@@ -59,11 +70,51 @@ class StartRideActivity : AppCompatActivity() {
      * <b><i>Note: Otherwise it is null.</i></b>
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        //WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        //Action
-        binding = ActivityStartRideBinding.inflate(layoutInflater)
+        ridesDB = RidesDB.get(requireContext())
+    }
 
-        setContentView(binding.root)
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentStartRideBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+            startRideButton.setOnClickListener{
+                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
+
+                    //Update the scooter attributes
+
+                    val name = nameTextFieldEdit.text.toString().trim()
+                    val location = locationTextFieldEdit.text.toString().trim()
+                    //set the name and location of the given values
+                    ridesDB.addScooter(name,location)
+
+                    //show text in log
+                    nameTextFieldEdit.setText("")
+                    locationTextFieldEdit.setText("")
+                    showMessage()
+                }
+            }
+        }
+
+    }
+
+    /**
+     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
+     */
+    private fun showMessage() {
+        Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
     }
 }

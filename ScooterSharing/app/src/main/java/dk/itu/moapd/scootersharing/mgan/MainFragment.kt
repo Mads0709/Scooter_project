@@ -28,6 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
@@ -109,8 +110,9 @@ class MainFragment : Fragment() {
             with (binding){
                 //start ride button
                 mainStartRideButton.setOnClickListener{
-                    val intent = Intent(requireActivity(), StartRideActivity::class.java)
-                    startActivity(intent)
+                    //val intent = Intent(requireActivity(), StartRideActivity::class.java)
+                    //startActivity(intent)
+                    findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
                 }
 
                 mainUpdateRideButton.setOnClickListener{
@@ -121,6 +123,7 @@ class MainFragment : Fragment() {
 
                     //Action
                     binding.listView.adapter = adapter
+
                 }
             }
         }
