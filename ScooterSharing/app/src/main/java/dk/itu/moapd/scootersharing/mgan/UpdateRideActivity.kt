@@ -45,11 +45,6 @@ class UpdateRideActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateRideBinding
 
     /**
-     * A 'Scooter' to store the scooter information
-     */
-    private val scooter: Scooter = Scooter("","")
-
-    /**
      * Called when the activity is starting. This is where most initialization should go: calling
      * `setContentView(int)` to inflate the activity's UI, using `findViewById()` to
      * programmatically interact with widgets in the UI, calling
@@ -70,39 +65,7 @@ class UpdateRideActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        ridesDB = RidesDB.get(this)
-        //Action
         binding = ActivityUpdateRideBinding.inflate(layoutInflater)
         setContentView(binding.root)
-        binding.apply {
-            //keeps the name of the current scootername in the textfield
-            nameTextFieldEdit.setText(ridesDB.getCurrentScooter().name)
-
-            updateRideButton.setOnClickListener{
-                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
-
-                    //Update the scooter attributes
-                    val location = locationTextFieldEdit.text.toString().trim()
-                    //set the name and location of the given values
-                    //ridesDB.addScooter(name, location)
-                    //reset textfield after adding scotter
-                    ridesDB.updateCurrentScooter(location) //virker ikke lige nu
-                    nameTextFieldEdit.setText("")
-                    locationTextFieldEdit.setText("")
-                    showMessage()
-
-
-                } else if (nameTextFieldEdit.text?.isNotEmpty() == false && locationTextFieldEdit.text?.isNotEmpty() == true) {
-                    showMessage()
-                }
-            }
-        }
-    }
-
-    /**
-     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
-     */
-    private fun showMessage() {
-        Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
     }
 }

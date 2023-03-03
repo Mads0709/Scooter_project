@@ -21,28 +21,27 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
-import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
+import com.google.android.material.snackbar.Snackbar
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentUpdateRideBinding
 
 /**
  * An activity class with methods to manage the main activity of the ScooterSharing application.
  */
-class MainFragment : Fragment() {
+class UpdateRideFragment : Fragment() {
 
     companion object{
         lateinit var ridesDB : RidesDB
-        private lateinit var adapter: CustomArrayAdapter
     }
 
-    private var _binding: FragmentMainBinding? = null
+    private var _binding: FragmentUpdateRideBinding? = null
     private val binding
         get() = checkNotNull(_binding)
 
@@ -74,52 +73,51 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         //WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        //reguireContext()
         ridesDB = RidesDB.get(requireContext())
-
-        val data = ridesDB.getRidesList()
-
-        //Create the custom adapter to populate the adapter
-        adapter = CustomArrayAdapter(requireContext(), R.layout.list_rides,data)
-
-
     }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentUpdateRideBinding.inflate(inflater, container, false)
         return binding.root
     }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            //keeps the name of the current scootername in the textfield
+            nameTextFieldEdit.setText(UpdateRideActivity.ridesDB.getCurrentScooter().name)
 
-            with (binding){
-                //start ride button
-                mainStartRideButton.setOnClickListener{
-                    //val intent = Intent(requireActivity(), StartRideActivity::class.java)
-                    //startActivity(intent)
-                    findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
-                }
+            updateRideButton.setOnClickListener {
+                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
 
-                mainUpdateRideButton.setOnClickListener{
-                    //val intent = Intent(requireActivity(), UpdateRideActivity::class.java)
-                    //startActivity(intent)
-                    findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
-                }
-                showListButton.setOnClickListener{
+                    //Update the scooter attributes
+                    val location = locationTextFieldEdit.text.toString().trim()
+                    //set the name and location of the given values
+                    //ridesDB.addScooter(name, location)
+                    //reset textfield after adding scotter
+                    UpdateRideActivity.ridesDB.updateCurrentScooter(location) //virker ikke lige nu
+                    nameTextFieldEdit.setText("")
+                    locationTextFieldEdit.setText("")
+                    showMessage()
 
-                    //Action
-                    binding.listView.adapter = adapter
 
+                } else if (nameTextFieldEdit.text?.isNotEmpty() == false && locationTextFieldEdit.text?.isNotEmpty() == true) {
+                    showMessage()
                 }
             }
         }
+    }
+    /**
+     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
+     */
+    private fun showMessage() {
+        Snackbar.make(binding.root, UpdateRideActivity.ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
+    }
+
 }
+
