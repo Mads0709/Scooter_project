@@ -31,18 +31,17 @@ import androidx.navigation.fragment.findNavController
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
- * An activity class with methods to manage the main activity of the ScooterSharing application.
+ * A fragment class with methods to manage the main fragment of the ScooterSharing application.
  */
 class MainFragment : Fragment() {
 
+    /**
+     * A set of static attributes used in this activity class.
+     */
     companion object{
         lateinit var ridesDB : RidesDB
         private lateinit var adapter: CustomArrayAdapter
     }
-
-    private var _binding: FragmentMainBinding? = null
-    private val binding
-        get() = checkNotNull(_binding)
 
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
@@ -50,6 +49,11 @@ class MainFragment : Fragment() {
      * layout file present in that module. An instance of a binding class contains direct references
      * to all views that have an ID in the corresponding layout.
      */
+    private var _binding: FragmentMainBinding? = null
+    private val binding
+        get() = checkNotNull(_binding)
+
+
 
 
     /**
@@ -82,6 +86,28 @@ class MainFragment : Fragment() {
 
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and
+     * non-graphical fragments can return null. This will be called between `onCreate(Bundle)` and
+     * `onViewCreated(View, Bundle)`. A default `View` can be returned by calling `Fragment(int)` in
+     * your constructor. Otherwise, this method returns null.
+     *
+     * It is recommended to <strong>only</strong> inflate the layout in this method and move logic
+     * that operates on the returned View to `onViewCreated(View, Bundle)`.
+     *
+     * If you return a `View` from here, you will later be called in `onDestroyView()` when the view
+     * is being released.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the
+     *      fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be
+     *      attached to. The fragment should not add the view itself, but this can be used to
+     *      generate the `LayoutParams` of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous
+     *      saved state as given here.
+     *
+     * @return Return the View for the fragment's UI, or null.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -90,11 +116,28 @@ class MainFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Called when the view previously created by `onCreateView()` has been detached from the
+     * fragment. The next time the fragment needs to be displayed, a new view will be created. This
+     * is called after `onStop()` and before `onDestroy()`. It is called <em>regardless</em> of
+     * whether `onCreateView()` returned a non-null view. Internally it is called after the view's
+     * state has been saved but before it has been removed from its parent.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /**
+     * Called immediately after `onCreateView(LayoutInflater, ViewGroup, Bundle)` has returned, but
+     * before any saved state has been restored in to the view. This gives subclasses a chance to
+     * initialize themselves once they know their view hierarchy has been completely created. The
+     * fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view The View returned by `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous
+     *      saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
