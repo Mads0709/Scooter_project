@@ -53,9 +53,6 @@ class MainFragment : Fragment() {
     private val binding
         get() = checkNotNull(_binding)
 
-
-
-
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
      * `setContentView(int)` to inflate the fragment's UI, using `findViewById()` to

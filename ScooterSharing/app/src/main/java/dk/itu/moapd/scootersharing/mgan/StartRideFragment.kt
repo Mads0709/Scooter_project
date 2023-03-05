@@ -30,16 +30,16 @@ import com.google.android.material.snackbar.Snackbar
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
 
 /**
- * An activity class with methods to manage the main activity of the ScooterSharing application.
+ * An fragment class with methods to manage the main fragment of the ScooterSharing application.
  */
 class StartRideFragment : Fragment() {
 
+    /**
+     * A set of static attributes used in this fragment class.
+     */
     companion object{
         lateinit var ridesDB : RidesDB
     }
-    private var _binding: FragmentStartRideBinding? = null
-    private val binding
-        get() = checkNotNull(_binding)
 
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
@@ -48,21 +48,25 @@ class StartRideFragment : Fragment() {
      * to all views that have an ID in the corresponding layout.
      */
 
+    private var _binding: FragmentStartRideBinding? = null
+    private val binding
+        get() = checkNotNull(_binding)
+
     /**
-     * Called when the activity is starting. This is where most initialization should go: calling
-     * `setContentView(int)` to inflate the activity's UI, using `findViewById()` to
+     * Called when the fragment is starting. This is where most initialization should go: calling
+     * `setContentView(int)` to inflate the fragment's UI, using `findViewById()` to
      * programmatically interact with widgets in the UI, calling
      * `managedQuery(android.net.Uri, String[], String, String[], String)` to retrieve cursors for
      * data being displayed, etc.
      *
      * You can call `finish()` from within this function, in which case `onDestroy()` will be
-     * immediately called after `onCreate()` without any of the rest of the activity lifecycle
+     * immediately called after `onCreate()` without any of the rest of the fragment lifecycle
      * (`onStart()`, `onResume()`, onPause()`, etc) executing.
      *
      * <em>Derived classes must call through to the super class's implementation of this method. If
      * they do not, an exception will be thrown.</em>
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * @param savedInstanceState If the fragment is being re-initialized after previously being shut
      * down then this Bundle contains the data it most recently supplied in `onSaveInstanceState()`.
      * <b><i>Note: Otherwise it is null.</i></b>
      */
@@ -71,6 +75,28 @@ class StartRideFragment : Fragment() {
         ridesDB = RidesDB.get(requireContext())
     }
 
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and
+     * non-graphical fragments can return null. This will be called between `onCreate(Bundle)` and
+     * `onViewCreated(View, Bundle)`. A default `View` can be returned by calling `Fragment(int)` in
+     * your constructor. Otherwise, this method returns null.
+     *
+     * It is recommended to <strong>only</strong> inflate the layout in this method and move logic
+     * that operates on the returned View to `onViewCreated(View, Bundle)`.
+     *
+     * If you return a `View` from here, you will later be called in `onDestroyView()` when the view
+     * is being released.
+     *
+     * @param inflater The LayoutInflater object that can be used to inflate any views in the
+     *      fragment.
+     * @param container If non-null, this is the parent view that the fragment's UI should be
+     *      attached to. The fragment should not add the view itself, but this can be used to
+     *      generate the `LayoutParams` of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous
+     *      saved state as given here.
+     *
+     * @return Return the View for the fragment's UI, or null.
+     */
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -79,11 +105,28 @@ class StartRideFragment : Fragment() {
         return binding.root
     }
 
+    /**
+     * Called when the view previously created by `onCreateView()` has been detached from the
+     * fragment. The next time the fragment needs to be displayed, a new view will be created. This
+     * is called after `onStop()` and before `onDestroy()`. It is called <em>regardless</em> of
+     * whether `onCreateView()` returned a non-null view. Internally it is called after the view's
+     * state has been saved but before it has been removed from its parent.
+     */
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
     }
 
+    /**
+     * Called immediately after `onCreateView(LayoutInflater, ViewGroup, Bundle)` has returned, but
+     * before any saved state has been restored in to the view. This gives subclasses a chance to
+     * initialize themselves once they know their view hierarchy has been completely created. The
+     * fragment's view hierarchy is not however attached to its parent at this point.
+     *
+     * @param view The View returned by `onCreateView(LayoutInflater, ViewGroup, Bundle)`.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous
+     *      saved state as given here.
+     */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
