@@ -32,6 +32,9 @@ import dk.itu.moapd.scootersharing.mgan.databinding.ActivityUpdateRideBinding
  */
 class UpdateRideActivity : AppCompatActivity() {
 
+    /**
+     * A set of static attributes used in this activity class.
+     */
     companion object{
         lateinit var ridesDB : RidesDB
     }
