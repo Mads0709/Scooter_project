@@ -36,7 +36,7 @@ import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 class MainFragment : Fragment() {
 
     /**
-     * A set of static attributes used in this activity class.
+     * A set of static attributes used in this fragment class.
      */
     companion object{
         lateinit var ridesDB : RidesDB
@@ -57,20 +57,20 @@ class MainFragment : Fragment() {
 
 
     /**
-     * Called when the activity is starting. This is where most initialization should go: calling
-     * `setContentView(int)` to inflate the activity's UI, using `findViewById()` to
+     * Called when the fragment is starting. This is where most initialization should go: calling
+     * `setContentView(int)` to inflate the fragment's UI, using `findViewById()` to
      * programmatically interact with widgets in the UI, calling
      * `managedQuery(android.net.Uri, String[], String, String[], String)` to retrieve cursors for
      * data being displayed, etc.
      *
      * You can call `finish()` from within this function, in which case `onDestroy()` will be
-     * immediately called after `onCreate()` without any of the rest of the activity lifecycle
+     * immediately called after `onCreate()` without any of the rest of the fragment lifecycle
      * (`onStart()`, `onResume()`, onPause()`, etc) executing.
      *
      * <em>Derived classes must call through to the super class's implementation of this method. If
      * they do not, an exception will be thrown.</em>
      *
-     * @param savedInstanceState If the activity is being re-initialized after previously being shut
+     * @param savedInstanceState If the fragment is being re-initialized after previously being shut
      * down then this Bundle contains the data it most recently supplied in `onSaveInstanceState()`.
      * <b><i>Note: Otherwise it is null.</i></b>
      */

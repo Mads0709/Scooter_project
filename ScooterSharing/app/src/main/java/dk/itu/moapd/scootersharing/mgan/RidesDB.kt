@@ -24,10 +24,24 @@ import android . content . Context
 import java . util . Random
 import kotlin . collections . ArrayList
 
+/**
+ * class responsible for storing scooter information for each registered scooter.
+ * @param context The current context of the RidesDB class.
+ */
 
 class RidesDB private constructor ( context : Context) {
+    /**
+    A list to store all the Scooters.
+     */
     private val rides = ArrayList < Scooter >()
+    /**
+     * A set of static attributes used in this class.
+     */
     companion object : RidesDBHolder < RidesDB , Context >(:: RidesDB )
+
+    /**
+     * add these three scooters when the app is initialised
+     */
     init {
         rides.add (Scooter (" CPH001 ", "ITU ", randomDate () )
         )
@@ -37,18 +51,43 @@ class RidesDB private constructor ( context : Context) {
         )
     }
 
+    /**
+     * Get the current list of scooters
+     * @return A list of all scooters added to the list
+     */
     fun getRidesList () : List < Scooter > {
         return rides
     }
+
+    /**
+     * Add a scooter to the list
+     * @param name the name of the scooter
+     * @param location the location of the scooter
+     */
     fun addScooter ( name : String, location : String ) {
         rides.add(Scooter(name, location))
     }
+
+    /**
+     * Update the location for last scooter in the list
+     * @param location updated location of the scooter
+     */
     fun updateCurrentScooter ( location : String ) {
         rides.last().location = location
     }
+
+    /**
+     * Get the last scooter in the list
+     * @return The last scooter in the list
+     */
     fun getCurrentScooter () : Scooter {
         return rides.last()
     }
+
+    /**
+     * Get the string information for the last scooter in the list.
+     * @return a string representation of last scooter's information in the list.
+     */
     fun getCurrentScooterInfo () : String {
         return getCurrentScooter().toString()
     }
@@ -64,6 +103,10 @@ class RidesDB private constructor ( context : Context) {
         return ( now - year ) . toLong ()
     }
 }
+
+/**
+ * A singleton to make sure you only have one instance of the RidesDB class.
+ */
 open class RidesDBHolder < out T : Any , in A >( creator : ( A ) -> T ) {
     private var creator : (( A ) -> T ) ? = creator
     @Volatile private var instance : T ? = null
