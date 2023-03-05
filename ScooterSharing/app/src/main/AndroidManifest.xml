@@ -15,9 +15,6 @@
             android:name=".UpdateRideActivity"
             android:exported="false" />
         <activity
-            android:name=".StartRideActivity"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

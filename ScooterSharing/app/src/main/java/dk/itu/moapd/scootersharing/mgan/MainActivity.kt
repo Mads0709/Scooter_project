@@ -21,7 +21,6 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.WindowCompat
@@ -39,10 +38,6 @@ class MainActivity : AppCompatActivity() {
      * to all views that have an ID in the corresponding layout.
      */
     private lateinit var binding: ActivityMainBinding
-
-    /**
-     * A 'Scooter' to store the scooter information
-     */
 
 
     /**

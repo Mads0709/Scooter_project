@@ -45,11 +45,6 @@ class UpdateRideActivity : AppCompatActivity() {
     private lateinit var binding: ActivityUpdateRideBinding
 
     /**
-     * A 'Scooter' to store the scooter information
-     */
-    private val scooter: Scooter = Scooter("","")
-
-    /**
      * Called when the activity is starting. This is where most initialization should go: calling
      * `setContentView(int)` to inflate the activity's UI, using `findViewById()` to
      * programmatically interact with widgets in the UI, calling

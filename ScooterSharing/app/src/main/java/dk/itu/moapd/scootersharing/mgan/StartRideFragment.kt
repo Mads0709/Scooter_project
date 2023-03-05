@@ -21,15 +21,12 @@
 
 package dk.itu.moapd.scootersharing.mgan
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
 
 /**
@@ -70,7 +67,6 @@ class StartRideFragment : Fragment() {
      * <b><i>Note: Otherwise it is null.</i></b>
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        //WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         ridesDB = RidesDB.get(requireContext())
     }

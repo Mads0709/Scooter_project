@@ -26,10 +26,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.WindowCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
-import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
@@ -55,11 +53,6 @@ class MainFragment : Fragment() {
 
 
     /**
-     * A 'Scooter' to store the scooter information
-     */
-    private val scooter: Scooter = Scooter("","")
-
-    /**
      * Called when the activity is starting. This is where most initialization should go: calling
      * `setContentView(int)` to inflate the activity's UI, using `findViewById()` to
      * programmatically interact with widgets in the UI, calling
@@ -78,9 +71,7 @@ class MainFragment : Fragment() {
      * <b><i>Note: Otherwise it is null.</i></b>
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        //WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
-        //reguireContext()
         ridesDB = RidesDB.get(requireContext())
 
         val data = ridesDB.getRidesList()
@@ -110,8 +101,6 @@ class MainFragment : Fragment() {
             with (binding){
                 //start ride button
                 mainStartRideButton.setOnClickListener{
-                    //val intent = Intent(requireActivity(), StartRideActivity::class.java)
-                    //startActivity(intent)
                     findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
                 }
 
