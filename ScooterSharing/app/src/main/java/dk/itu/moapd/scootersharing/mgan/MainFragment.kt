@@ -139,14 +139,11 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
             with (binding){
-                //start ride button
                 mainStartRideButton.setOnClickListener{
                     findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
                 }
 
                 mainUpdateRideButton.setOnClickListener{
-                    //val intent = Intent(requireActivity(), UpdateRideActivity::class.java)
-                    //startActivity(intent)
                     findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
                 }
                 showListButton.setOnClickListener{
