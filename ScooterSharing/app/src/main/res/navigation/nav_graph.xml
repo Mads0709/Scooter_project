@@ -11,10 +11,18 @@
         <action
             android:id="@+id/action_mainFragment_to_startRideFragment"
             app:destination="@id/startRideFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_updateRideFragment"
+            app:destination="@id/updateRideFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/startRideFragment"
         android:name="dk.itu.moapd.scootersharing.mgan.StartRideFragment"
         android:label="StartRideFragment"/>
+    <fragment
+        android:id="@+id/updateRideFragment"
+        android:name="dk.itu.moapd.scootersharing.mgan.UpdateRideFragment"
+        android:label="UpdateRideFragment"
+        />
 </navigation>
