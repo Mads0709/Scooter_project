@@ -69,6 +69,30 @@ class RidesDB private constructor ( context : Context) {
     }
 
     /**
+     * Remove a scooter from the list
+     * @param name the name of the scooter
+     */
+    fun deleteScooter(name: String){
+        val scooter = getScooterByName(name)
+        if (scooter != Scooter("","")){
+            rides.remove(scooter)
+        }
+    }
+
+    /**
+     * Find a scooter in the list by a given name
+     * @param name the name of the scooter
+     * @return a Scooter from the list.
+     */
+    fun getScooterByName(name: String):Scooter{
+        for (s in rides){
+            if (name == s.name)
+                return s
+        }
+        return Scooter("","")
+    }
+
+    /**
      * Update the location for last scooter in the list
      * @param location updated location of the scooter
      */
