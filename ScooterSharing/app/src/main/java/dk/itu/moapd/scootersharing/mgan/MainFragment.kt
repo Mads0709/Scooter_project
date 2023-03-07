@@ -28,6 +28,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
@@ -75,10 +76,10 @@ class MainFragment : Fragment() {
         super.onCreate(savedInstanceState)
         ridesDB = RidesDB.get(requireContext())
 
-        val data = ridesDB.getRidesList()
+
 
         //Create the custom adapter to populate the adapter
-        adapter = CustomArrayAdapter(requireContext(), R.layout.list_rides,data)
+        adapter = CustomArrayAdapter(ridesDB)
 
 
     }
@@ -149,7 +150,9 @@ class MainFragment : Fragment() {
                 showListButton.setOnClickListener{
 
                     //Action
-                    binding.listView.adapter = adapter
+
+                    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                    binding.recyclerView.adapter = adapter
 
                 }
             }

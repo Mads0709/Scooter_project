@@ -27,51 +27,42 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
+import dk.itu.moapd.scootersharing.mgan.databinding.ListRidesBinding
 
 /**
  * A class to customize an adapter with a `ViewHolder` to populate dataset about scooter information into a `ListView`.
  */
 class CustomArrayAdapter(
-    context: Context, private var resource: Int,
-    data: List<Scooter>) :
-    ArrayAdapter<Scooter>(context, R.layout.list_rides, data) {
+    private val data: RidesDB) :
+    RecyclerView.Adapter<CustomArrayAdapter.ViewHolder>() {
 
     /**
      * An internal view holder class used to represent the layout that shows a single `Scooter`
      * instance in the `ListView`.
      */
-    private class ViewHolder(view: View) {
-        val name: TextView = view.findViewById(R.id.list_item_name)
-        val location: TextView = view.findViewById(R.id.list_item_location)
-        val timestamp: TextView = view.findViewById(R.id.list_item_timestamp)
+    class ViewHolder(private val binding: ListRidesBinding) :
+        RecyclerView.ViewHolder(binding.root){
+        fun bind(scooter :Scooter){
+            binding.listItemName.text = scooter.name
+            binding.listItemLocation.text = scooter.location
+            binding.listItemTimestamp.text = scooter.timestamp.toString()
+        }
+
     }
 
-    /**
-     * Get the `View` instance with information about a selected `Scooter` from the dataset.
-     *
-     * @param position The position of the specified item.
-     * @param convertView The current view holder.
-     * @param parent The parent view which will group the view holder.
-     *
-     * @return A new view holder populated with the selected `Scooter` data.
-     * */
-    override fun getView(
-        position: Int, convertView: View?,
-        parent: ViewGroup
-    ): View {
-        var view = convertView
-        val viewHolder: ViewHolder
-        if (view == null) {
-            val inflater = LayoutInflater.from(context)
-            view = inflater.inflate(resource, parent, false)
-            viewHolder = ViewHolder(view)
-        } else
-            viewHolder = view.tag as ViewHolder
-            view?.tag = viewHolder
-            val scooter = getItem(position)
-            viewHolder.name.text = scooter?.name.toString()
-            viewHolder.location.text = scooter?.location.toString()
-            viewHolder.timestamp.text = scooter?.timestamp.toString()
-            return view!!
+    override fun onCreateViewHolder(parent: ViewGroup,
+                                    viewType: Int): ViewHolder {
+        val inflater = LayoutInflater.from(parent.context)
+        val binding = ListRidesBinding.inflate(
+            inflater, parent, false)
+        return ViewHolder(binding)
     }
+    override fun getItemCount() = data.getRidesList().size
+    override fun onBindViewHolder(holder: ViewHolder,
+                                  position: Int) {
+        val scooter = data.getRidesList()[position]
+        holder.bind(scooter)
+    }
+
 }
