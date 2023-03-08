@@ -26,7 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.google.android.material.snackbar.Snackbar
+import androidx.navigation.fragment.findNavController
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentDeleteRideBinding
 
 /**
@@ -136,10 +137,18 @@ class DeleteRideFragment : Fragment() {
                     //Update the scooter attributes
                     val name = nameTextFieldEdit.text.toString().trim()
                     //set the name and location of the given values
-                    ridesDB.deleteScooter(name)
-
                     nameTextFieldEdit.setText("")
+                    MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(getString(R.string.title_delete_ride_alert))
+                        .setMessage(getString(R.string.support_text_delete_ride_alert))
+                        .setNeutralButton(getString(R.string.cancel_delete_ride_button)) { dialog, which ->
+                        }
+                        .setPositiveButton(getString(R.string.confirm_delete_ride_button)) { dialog, which ->
+                            ridesDB.deleteScooter(name)
+                        }
+                        .show()
                 }
+
             }
         }
 
