@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package dk.itu.moapd.scootersharing.mgan
+package dk.itu.moapd.scootersharing.mgan.activites.mgan
 
 import java.text.SimpleDateFormat
 import java.util.Date

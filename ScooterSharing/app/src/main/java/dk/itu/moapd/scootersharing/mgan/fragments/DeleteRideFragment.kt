@@ -1,47 +1,25 @@
-/**
- * * MIT License
- * Copyright (c) 2023 Christian Bank Lauridsen & Mads Greve Andersen
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy
- * of this software and associated documentation files (the "Software"), to deal
- * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
- * The above copyright notice and this permission notice shall be included in all
- * copies or substantial portions of the Software.
- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
- * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
- * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
- * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
- * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
- * SOFTWARE.
- */
+package dk.itu.moapd.scootersharing.mgan.fragments
 
-package dk.itu.moapd.scootersharing.mgan
-
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import dk.itu.moapd.scootersharing.mgan.R
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentDeleteRideBinding
 
 /**
- * A fragment class with methods to manage the main fragment of the ScooterSharing application.
+ * An fragment class with methods to manage the main fragment of the ScooterSharing application.
  */
-class MainFragment : Fragment() {
+class DeleteRideFragment : Fragment() {
 
     /**
      * A set of static attributes used in this fragment class.
      */
     companion object{
         lateinit var ridesDB : RidesDB
-        private lateinit var adapter: CustomArrayAdapter
     }
 
     /**
@@ -50,7 +28,8 @@ class MainFragment : Fragment() {
      * layout file present in that module. An instance of a binding class contains direct references
      * to all views that have an ID in the corresponding layout.
      */
-    private var _binding: FragmentMainBinding? = null
+
+    private var _binding: FragmentDeleteRideBinding? = null
     private val binding
         get() = checkNotNull(_binding)
 
@@ -75,13 +54,6 @@ class MainFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ridesDB = RidesDB.get(requireContext())
-
-
-
-        //Create the custom adapter to populate the adapter
-        adapter = CustomArrayAdapter(ridesDB)
-
-
     }
 
     /**
@@ -110,7 +82,7 @@ class MainFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentMainBinding.inflate(inflater, container, false)
+        _binding = FragmentDeleteRideBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -138,27 +110,28 @@ class MainFragment : Fragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        with(binding) {
+            deleteRideButton.setOnClickListener{
+                if (nameTextFieldEdit.text?.isNotEmpty() == true) {
 
-            with (binding){
-                mainStartRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
+                    //Update the scooter attributes
+                    val name = nameTextFieldEdit.text.toString().trim()
+                    //set the name and location of the given values
+                    nameTextFieldEdit.setText("")
+                    MaterialAlertDialogBuilder(requireActivity())
+                        .setTitle(getString(R.string.title_delete_ride_alert))
+                        .setMessage(getString(R.string.support_text_delete_ride_alert))
+                        .setNeutralButton(getString(R.string.cancel_delete_ride_button)) { dialog, which ->
+                        }
+                        .setPositiveButton(getString(R.string.confirm_delete_ride_button)) { dialog, which ->
+                            ridesDB.deleteScooter(name)
+                        }
+                        .show()
                 }
 
-                mainUpdateRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
-                }
-                mainDeleteRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_deleteRideFragment)
-                }
-
-                showListButton.setOnClickListener{
-
-                    //Action
-
-                    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                    binding.recyclerView.adapter = adapter
-
-                }
             }
         }
+
+    }
+
 }

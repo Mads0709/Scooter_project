@@ -19,11 +19,13 @@
  * SOFTWARE.
  */
 
-package dk.itu.moapd.scootersharing.mgan
+package dk.itu.moapd.scootersharing.mgan.activites
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.view.WindowCompat
+import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 
 /**
@@ -38,6 +40,8 @@ class MainActivity : AppCompatActivity() {
      * to all views that have an ID in the corresponding layout.
      */
     private lateinit var binding: ActivityMainBinding
+
+
 
 
     /**
@@ -59,11 +63,11 @@ class MainActivity : AppCompatActivity() {
      * <b><i>Note: Otherwise it is null.</i></b>
      */
     override fun onCreate(savedInstanceState: Bundle?) {
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        //WindowCompat.setDecorFitsSystemWindows(window, false)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
+        setContentView(binding.root)
     }
 
 

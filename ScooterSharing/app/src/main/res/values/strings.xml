@@ -17,5 +17,6 @@
     <string name="cancel_delete_ride_button">Cancel</string>
     <string name="title_delete_ride_alert">Confirm delete ride</string>
     <string name="support_text_delete_ride_alert">Are you sure you want to delete this ride?</string>
+    <string name="sign_out_button">Sign out</string>
 
 </resources>

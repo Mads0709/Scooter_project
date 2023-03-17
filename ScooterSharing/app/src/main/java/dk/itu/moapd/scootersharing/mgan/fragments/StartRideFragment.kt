@@ -19,21 +19,21 @@
  * SOFTWARE.
  */
 
-package dk.itu.moapd.scootersharing.mgan
+package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentDeleteRideBinding
+import com.google.android.material.snackbar.Snackbar
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
 
 /**
  * An fragment class with methods to manage the main fragment of the ScooterSharing application.
  */
-class DeleteRideFragment : Fragment() {
+class StartRideFragment : Fragment() {
 
     /**
      * A set of static attributes used in this fragment class.
@@ -49,7 +49,7 @@ class DeleteRideFragment : Fragment() {
      * to all views that have an ID in the corresponding layout.
      */
 
-    private var _binding: FragmentDeleteRideBinding? = null
+    private var _binding: FragmentStartRideBinding? = null
     private val binding
         get() = checkNotNull(_binding)
 
@@ -102,7 +102,7 @@ class DeleteRideFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentDeleteRideBinding.inflate(inflater, container, false)
+        _binding = FragmentStartRideBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -131,27 +131,30 @@ class DeleteRideFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            deleteRideButton.setOnClickListener{
-                if (nameTextFieldEdit.text?.isNotEmpty() == true) {
+            startRideButton.setOnClickListener{
+                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
 
                     //Update the scooter attributes
-                    val name = nameTextFieldEdit.text.toString().trim()
-                    //set the name and location of the given values
-                    nameTextFieldEdit.setText("")
-                    MaterialAlertDialogBuilder(requireActivity())
-                        .setTitle(getString(R.string.title_delete_ride_alert))
-                        .setMessage(getString(R.string.support_text_delete_ride_alert))
-                        .setNeutralButton(getString(R.string.cancel_delete_ride_button)) { dialog, which ->
-                        }
-                        .setPositiveButton(getString(R.string.confirm_delete_ride_button)) { dialog, which ->
-                            ridesDB.deleteScooter(name)
-                        }
-                        .show()
-                }
 
+                    val name = nameTextFieldEdit.text.toString().trim()
+                    val location = locationTextFieldEdit.text.toString().trim()
+                    //set the name and location of the given values
+                    ridesDB.addScooter(name,location)
+
+                    //show text in log
+                    nameTextFieldEdit.setText("")
+                    locationTextFieldEdit.setText("")
+                    showMessage()
+                }
             }
         }
 
     }
 
+    /**
+     * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
+     */
+    private fun showMessage() {
+        Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
+    }
 }

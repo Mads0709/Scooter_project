@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package dk.itu.moapd.scootersharing.mgan
+package dk.itu.moapd.scootersharing.mgan.activites.mgan
 import android . content . Context
 import java . util . Random
 import kotlin . collections . ArrayList
@@ -33,21 +33,24 @@ class RidesDB private constructor ( context : Context) {
     /**
     A list to store all the Scooters.
      */
-    private val rides = ArrayList < Scooter >()
+    private val rides = ArrayList <Scooter>()
     /**
      * A set of static attributes used in this class.
      */
-    companion object : RidesDBHolder < RidesDB , Context >(:: RidesDB )
+    companion object : RidesDBHolder<RidesDB, Context>(:: RidesDB )
 
     /**
      * add these three scooters when the app is initialised
      */
     init {
-        rides.add (Scooter (" CPH001 ", "ITU ", randomDate () )
+        rides.add (
+            Scooter (" CPH001 ", "ITU ", randomDate () )
         )
-        rides.add (Scooter (" CPH002 ", " Fields ", randomDate () )
+        rides.add (
+            Scooter (" CPH002 ", " Fields ", randomDate () )
         )
-        rides.add (Scooter (" CPH003 ", " Lufthavn ", randomDate () )
+        rides.add (
+            Scooter (" CPH003 ", " Lufthavn ", randomDate () )
         )
     }
 
@@ -55,7 +58,7 @@ class RidesDB private constructor ( context : Context) {
      * Get the current list of scooters
      * @return A list of all scooters added to the list
      */
-    fun getRidesList () : List < Scooter > {
+    fun getRidesList () : List <Scooter> {
         return rides
     }
 
@@ -84,7 +87,7 @@ class RidesDB private constructor ( context : Context) {
      * @param name the name of the scooter
      * @return a Scooter from the list.
      */
-    fun getScooterByName(name: String):Scooter{
+    fun getScooterByName(name: String): Scooter {
         for (s in rides){
             if (name == s.name)
                 return s

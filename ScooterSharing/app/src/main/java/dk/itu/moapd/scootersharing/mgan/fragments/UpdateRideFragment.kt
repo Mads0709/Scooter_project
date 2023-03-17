@@ -19,7 +19,7 @@
  * SOFTWARE.
  */
 
-package dk.itu.moapd.scootersharing.mgan
+package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -27,6 +27,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentUpdateRideBinding
 
 /**
