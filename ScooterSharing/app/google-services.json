@@ -46,7 +46,15 @@
           }
         },
         {
-          "client_id": "438244451995-8fqpb5adire67al30n074hc0co7du4m7.apps.googleusercontent.com",
+          "client_id": "438244451995-vo4kr084kpgel9p5iomqihcrhfog962c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.itu.moapd.scootersharing.mgan",
+            "certificate_hash": "154a0d5f528468e5a127079748c96a8fbe849c60"
+          }
+        },
+        {
+          "client_id": "438244451995-0jtu1eebpvmuljniska4rvg4kma2rdar.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
@@ -59,7 +67,7 @@
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "438244451995-8fqpb5adire67al30n074hc0co7du4m7.apps.googleusercontent.com",
+              "client_id": "438244451995-0jtu1eebpvmuljniska4rvg4kma2rdar.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
