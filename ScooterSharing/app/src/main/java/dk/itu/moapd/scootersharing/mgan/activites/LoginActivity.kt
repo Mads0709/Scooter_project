@@ -29,6 +29,7 @@ class LoginActivity : AppCompatActivity() {
         // Create and launch sign-in intent.
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .setTheme(R.style.Theme_ScooterSharing)
             .build()
