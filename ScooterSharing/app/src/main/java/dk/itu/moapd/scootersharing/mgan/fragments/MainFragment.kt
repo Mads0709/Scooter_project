@@ -31,22 +31,23 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.app
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.LoginActivity
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
+import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
  * A fragment class with methods to manage the main fragment of the ScooterSharing application.
  */
-class MainFragment : Fragment() {
+class MainFragment : Fragment(), ItemClickListener {
 
     /**
      * A set of static attributes used in this fragment class.
@@ -69,6 +70,16 @@ class MainFragment : Fragment() {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
+
+    /**
+     * Inflates a custom Android layout used in the input dialog.
+     */
+    private lateinit var customAlertDialogView: View
+    /**
+     * An extension of `AlertDialog.Builder` to create custom dialogs using a Material theme (e.g.,
+     * Theme.MaterialComponents).
+     */
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -112,6 +123,74 @@ class MainFragment : Fragment() {
 
     }
 
+    //look at the r.id if they are the right ones
+    private fun launchCustomAlertDialog() {
+        // Get the edit text component.
+        val editTextName = customAlertDialogView
+            .findViewById<TextInputEditText>(R.id.nameTextFieldEdit)
+
+        // Show the dialog to the user.
+        materialAlertDialogBuilder.setView(customAlertDialogView)
+            .setTitle(getString(R.string.list_rides_title))
+            .setMessage("hej")
+            .setPositiveButton("add button") { dialog, _ ->
+
+                // Create the `Dummy` object using the name typed by the user.
+                val name = editTextName.text.toString()
+                val location = editTextName.text.toString()
+                if (name.isNotEmpty()) {
+                    val timestamp = System.currentTimeMillis()
+                    val scooter = Scooter(name, location, timestamp)
+
+                    // In the case of authenticated user, create a new unique key for the object in
+                    // the database.
+                    auth.currentUser?.let { user ->
+                        val uid = database.child("dummies")
+                            .child(user.uid)
+                            .push()
+                            .key
+
+                        // Insert the object in the database.
+                        uid?.let {
+                            database.child("dummies")
+                                .child(user.uid)
+                                .child(it)
+                                .setValue(scooter)
+                        }
+                    }
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("remove button") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    private fun launchUpdateAlertDialog(scooter: Scooter, position: Int) {
+        // Get the edit text component.
+        val editTextName = customAlertDialogView
+            .findViewById<TextInputEditText>(R.id.nameTextFieldEdit)
+        editTextName?.setText(scooter.name)
+
+        materialAlertDialogBuilder.setView(customAlertDialogView)
+            .setTitle("name of the scooter")
+            .setMessage("update message")
+            .setPositiveButton("update button") { dialog, _ ->
+                val name = editTextName?.text.toString()
+                if (name.isNotEmpty()) {
+                    scooter.name = name
+                    scooter.timestamp= System.currentTimeMillis()
+                    adapter.getRef(position).setValue(scooter)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton("cancel button") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
+    }
     /**
      * Called to have the fragment instantiate its user interface view. This is optional, and
      * non-graphical fragments can return null. This will be called between `onCreate(Bundle)` and
@@ -208,5 +287,9 @@ class MainFragment : Fragment() {
             LoginActivity::class.java)
         startActivity(intent)
         activity?.finish()
+    }
+
+    override fun onItemClickListener(dummy: Scooter, position: Int) {
+        TODO("Not yet implemented")
     }
 }

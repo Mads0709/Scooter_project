@@ -9,6 +9,7 @@ import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.databinding.ListRidesBinding
 
 
+
 /**
  * A class to customize an adapter with a `ViewHolder` to populate dataset about scooter information into a `ListView`.
  */
@@ -42,7 +43,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
     override fun onBindViewHolder(holder: ViewHolder, position: Int, scooter: Scooter) {
         holder.apply {
             bind(scooter)
-            itemView.setOnClickListener {
+            itemView.setOnLongClickListener {
                 itemClickListener.onItemClickListener(scooter, position)
                 true
             }

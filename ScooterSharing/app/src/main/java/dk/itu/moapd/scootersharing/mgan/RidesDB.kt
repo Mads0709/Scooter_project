@@ -124,7 +124,7 @@ class RidesDB private constructor ( context : Context) {
      * @return A random timestamp in the last year .
      */
     private fun randomDate () : Long {
-        val random = Random ()
+        val random = java.util.Random()
         val now = System . currentTimeMillis ()
         val year = random . nextDouble () * 1000 * 60 * 60 * 24 * 365
         return ( now - year ) . toLong ()
