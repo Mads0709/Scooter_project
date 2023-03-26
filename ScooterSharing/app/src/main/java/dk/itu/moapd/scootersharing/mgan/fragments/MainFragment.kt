@@ -30,10 +30,17 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.app
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.LoginActivity
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
@@ -61,6 +68,7 @@ class MainFragment : Fragment() {
 
 
     private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -86,9 +94,20 @@ class MainFragment : Fragment() {
 
         // Initialize Firebase Auth.
         auth = FirebaseAuth.getInstance()
+        // intialize firebase realtime
+        database = Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
 
-        //Create the custom adapter to populate the adapter
-        adapter = CustomArrayAdapter(ridesDB)
+        auth.currentUser?.let {
+            val query = database.child("scooters")
+                .child((it.uid))
+                .orderByChild("createdAt")
+            val options = FirebaseRecyclerOptions.Builder<Scooter>()
+                .setQuery(query, Scooter::class.java)
+                .setLifecycleOwner(this)
+                .build()
+            //Create the custom adapter to populate the adapter
+            adapter = CustomArrayAdapter(this, options)
+        }
 
 
     }
