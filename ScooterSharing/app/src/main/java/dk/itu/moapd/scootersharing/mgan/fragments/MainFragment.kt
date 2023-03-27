@@ -145,14 +145,14 @@ class MainFragment : Fragment(), ItemClickListener {
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
                     auth.currentUser?.let { user ->
-                        val uid = database.child("dummies")
+                        val uid = database.child("scooters")
                             .child(user.uid)
                             .push()
                             .key
 
                         // Insert the object in the database.
                         uid?.let {
-                            database.child("dummies")
+                            database.child("scooters")
                                 .child(user.uid)
                                 .child(it)
                                 .setValue(scooter)
