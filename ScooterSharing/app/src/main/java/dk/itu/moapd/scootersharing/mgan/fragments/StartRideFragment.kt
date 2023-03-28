@@ -139,7 +139,7 @@ class StartRideFragment : Fragment() {
                     val name = nameTextFieldEdit.text.toString().trim()
                     val location = locationTextFieldEdit.text.toString().trim()
                     //set the name and location of the given values
-                    ridesDB.addScooter(name,location)
+                    //ridesDB.addScooter(name,location)
 
                     //show text in log
                     nameTextFieldEdit.setText("")

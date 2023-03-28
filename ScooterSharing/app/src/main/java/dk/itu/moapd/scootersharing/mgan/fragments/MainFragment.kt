@@ -110,7 +110,6 @@ class MainFragment : Fragment(), ItemClickListener {
 
         auth.currentUser?.let {
             val query = database.child("scooters")
-                .child((it.uid))
                 .orderByChild("createdAt")
             val options = FirebaseRecyclerOptions.Builder<Scooter>()
                 .setQuery(query, Scooter::class.java)
@@ -119,78 +118,8 @@ class MainFragment : Fragment(), ItemClickListener {
             //Create the custom adapter to populate the adapter
             adapter = CustomArrayAdapter(this, options)
         }
-
-
     }
 
-    //look at the r.id if they are the right ones
-    private fun launchCustomAlertDialog() {
-        // Get the edit text component.
-        val editTextName = customAlertDialogView
-            .findViewById<TextInputEditText>(R.id.nameTextFieldEdit)
-
-        // Show the dialog to the user.
-        materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle(getString(R.string.list_rides_title))
-            .setMessage("hej")
-            .setPositiveButton("add button") { dialog, _ ->
-
-                // Create the `Dummy` object using the name typed by the user.
-                val name = editTextName.text.toString()
-                val location = editTextName.text.toString()
-                if (name.isNotEmpty()) {
-                    val timestamp = System.currentTimeMillis()
-                    val scooter = Scooter(name, location, timestamp)
-
-                    // In the case of authenticated user, create a new unique key for the object in
-                    // the database.
-                    auth.currentUser?.let { user ->
-                        val uid = database.child("scooters")
-                            .child(user.uid)
-                            .push()
-                            .key
-
-                        // Insert the object in the database.
-                        uid?.let {
-                            database.child("scooters")
-                                .child(user.uid)
-                                .child(it)
-                                .setValue(scooter)
-                        }
-                    }
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("remove button") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .setCancelable(false)
-            .show()
-    }
-
-    private fun launchUpdateAlertDialog(scooter: Scooter, position: Int) {
-        // Get the edit text component.
-        val editTextName = customAlertDialogView
-            .findViewById<TextInputEditText>(R.id.nameTextFieldEdit)
-        editTextName?.setText(scooter.name)
-
-        materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle("name of the scooter")
-            .setMessage("update message")
-            .setPositiveButton("update button") { dialog, _ ->
-                val name = editTextName?.text.toString()
-                if (name.isNotEmpty()) {
-                    scooter.name = name
-                    scooter.timestamp= System.currentTimeMillis()
-                    adapter.getRef(position).setValue(scooter)
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton("cancel button") { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
     /**
      * Called to have the fragment instantiate its user interface view. This is optional, and
      * non-graphical fragments can return null. This will be called between `onCreate(Bundle)` and
@@ -271,14 +200,12 @@ class MainFragment : Fragment(), ItemClickListener {
                     true
                 }
 
-                showListButton.setOnClickListener{
-
+                //showListButton.setOnClickListener{
                     //Action
-
                     binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
                     binding.recyclerView.adapter = adapter
 
-                }
+                //}
             }
     }
 
@@ -289,7 +216,7 @@ class MainFragment : Fragment(), ItemClickListener {
         activity?.finish()
     }
 
-    override fun onItemClickListener(dummy: Scooter, position: Int) {
+    override fun onItemClickListener(scooter: Scooter, position: Int) {
         TODO("Not yet implemented")
     }
 }

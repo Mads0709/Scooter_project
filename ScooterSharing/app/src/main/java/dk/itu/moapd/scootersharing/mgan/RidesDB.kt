@@ -21,6 +21,10 @@
 
 package dk.itu.moapd.scootersharing.mgan.activites.mgan
 import android . content . Context
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
+import java.sql.Timestamp
 import java . util . Random
 import kotlin . collections . ArrayList
 
@@ -34,6 +38,8 @@ class RidesDB private constructor ( context : Context) {
     A list to store all the Scooters.
      */
     private val rides = ArrayList <Scooter>()
+    private lateinit var database: DatabaseReference
+
     /**
      * A set of static attributes used in this class.
      */
@@ -42,17 +48,6 @@ class RidesDB private constructor ( context : Context) {
     /**
      * add these three scooters when the app is initialised
      */
-    init {
-        rides.add (
-            Scooter (" CPH001 ", "ITU ", randomDate () )
-        )
-        rides.add (
-            Scooter (" CPH002 ", " Fields ", randomDate () )
-        )
-        rides.add (
-            Scooter (" CPH003 ", " Lufthavn ", randomDate () )
-        )
-    }
 
     /**
      * Get the current list of scooters
@@ -67,27 +62,31 @@ class RidesDB private constructor ( context : Context) {
      * @param name the name of the scooter
      * @param location the location of the scooter
      */
-    fun addScooter ( name : String, location : String ) {
+    /*fun addScooter ( name : String, location : String ) {
         rides.add(Scooter(name, location))
     }
+
+     */
 
     /**
      * Remove a scooter from the list
      * @param name the name of the scooter
      */
-    fun deleteScooter(name: String){
+  /*  fun deleteScooter(name: String){
         val scooter = getScooterByName(name)
         if (scooter != Scooter("","")){
             rides.remove(scooter)
         }
-    }
+
+   */
+
 
     /**
      * Find a scooter in the list by a given name
      * @param name the name of the scooter
      * @return a Scooter from the list.
      */
-    fun getScooterByName(name: String): Scooter {
+    /*fun getScooterByName(name: String): Scooter {
         for (s in rides){
             if (name == s.name)
                 return s
@@ -95,6 +94,8 @@ class RidesDB private constructor ( context : Context) {
         return Scooter("","")
     }
 
+
+     */
     /**
      * Update the location for last scooter in the list
      * @param location updated location of the scooter
@@ -129,6 +130,15 @@ class RidesDB private constructor ( context : Context) {
         val year = random . nextDouble () * 1000 * 60 * 60 * 24 * 365
         return ( now - year ) . toLong ()
     }
+
+    /*fun writeNewUser(name: String, location: String, timestamp: Long) {
+        database = Firebase.database.reference
+        val scooter = Scooter(name, location, timestamp)
+
+        database.child("scooters").child(name).setValue(scooter)
+    }
+
+     */
 }
 
 /**

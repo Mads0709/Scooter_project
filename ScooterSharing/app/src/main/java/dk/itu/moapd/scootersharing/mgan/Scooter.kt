@@ -31,14 +31,19 @@ import java.util.Date
  * @property timestamp
  */
 data class Scooter (
-    var name : String,
-    var location: String,
-    var timestamp: Long = System.currentTimeMillis()) {
+    //var key: String,
+    var isUsed: Boolean? = null,
+    var location: String? = null,
+    var name : String? = null,
+    var timestamp: String? = null
+    )
 
     /**
      * A method that returns the scooter name and location
      * @return a string representation of the name and location
      */
+
+    /*
     override fun toString(): String {
         return "[Scooter] $name is placed at $location the timestamp is:." + toDate()
     }
@@ -53,4 +58,6 @@ data class Scooter (
         val date = date2.format(netDate)
         return date
     }
-}
+
+     */
+

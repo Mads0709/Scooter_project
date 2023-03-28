@@ -124,7 +124,7 @@ class DeleteRideFragment : Fragment() {
                         .setNeutralButton(getString(R.string.cancel_delete_ride_button)) { dialog, which ->
                         }
                         .setPositiveButton(getString(R.string.confirm_delete_ride_button)) { dialog, which ->
-                            ridesDB.deleteScooter(name)
+                            //ridesDB.deleteScooter(name)
                         }
                         .show()
                 }
