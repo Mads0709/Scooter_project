@@ -1,10 +1,72 @@
 {
   "project_info": {
     "project_number": "438244451995",
+    "firebase_url": "https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "moapd-2023-e061c",
     "storage_bucket": "moapd-2023-e061c.appspot.com"
   },
   "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:438244451995:android:66c571c955d5312cf5083e",
+        "android_client_info": {
+          "package_name": "dk.itu.moapd.realtimestorage"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "438244451995-2k6pn3fpeudld84les9fd2sd1h9dl9jj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.itu.moapd.realtimestorage",
+            "certificate_hash": "b92606a9dbecf112c1be3e01718081947d3a8a16"
+          }
+        },
+        {
+          "client_id": "438244451995-3c135klnhtr3aeh3fh1co0ajuk62n8sn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.itu.moapd.realtimestorage",
+            "certificate_hash": "154a0d5f528468e5a127079748c96a8fbe849c60"
+          }
+        },
+        {
+          "client_id": "438244451995-5n7q9d506s3ac51bmb29pjnoldj7pl34.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.itu.moapd.realtimestorage",
+            "certificate_hash": "52c6fe82e06630b87d72a06a6dc86176275a630c"
+          }
+        },
+        {
+          "client_id": "438244451995-givj8n208cptkt0bk1gpv6qi9j2fgl5r.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "dk.itu.moapd.realtimestorage",
+            "certificate_hash": "87418b7d21ec7fad08f8281e9a81bf81e7649e0f"
+          }
+        },
+        {
+          "client_id": "438244451995-0jtu1eebpvmuljniska4rvg4kma2rdar.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBOyQV0DSoSDUCJ64kPODvgF3wNBUYQMNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "438244451995-0jtu1eebpvmuljniska4rvg4kma2rdar.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
     {
       "client_info": {
         "mobilesdk_app_id": "1:438244451995:android:d82db6691c75167af5083e",
