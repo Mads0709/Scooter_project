@@ -26,9 +26,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentUpdateRideBinding
+
 
 /**
  * An activity class with methods to manage the main activity of the ScooterSharing application.
@@ -42,6 +51,25 @@ class UpdateRideFragment : Fragment() {
         lateinit var ridesDB : RidesDB
     }
 
+    //private var _binding: FragmentStartRideBinding
+    private lateinit var  binding: FragmentUpdateRideBinding
+    // get() = checkNotNull(_binding)
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
+    /**
+     * Inflates a custom Android layout used in the input dialog.
+     */
+    private lateinit var customAlertDialogView: View
+
+    /**
+     * An extension of `AlertDialog.Builder` to create custom dialogs using a Material theme (e.g.,
+     * Theme.MaterialComponents).
+     */
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+
+
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
      * views. Once view binding is enabled in a module, it generates a binding class for each XML
@@ -49,9 +77,10 @@ class UpdateRideFragment : Fragment() {
      * to all views that have an ID in the corresponding layout.
      */
 
-    private var _binding:FragmentUpdateRideBinding? = null
+    /*private var _binding:FragmentUpdateRideBinding? = null
     private val binding
         get() = checkNotNull(_binding)
+     */
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -71,9 +100,24 @@ class UpdateRideFragment : Fragment() {
      * down then this Bundle contains the data it most recently supplied in `onSaveInstanceState()`.
      * <b><i>Note: Otherwise it is null.</i></b>
      */
+
+
+    open fun getScooter(dataSnapshot: DataSnapshot) {
+        val scooter: Scooter? = dataSnapshot.getValue(Scooter::class.java)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ridesDB = RidesDB.get(requireContext())
+        binding = FragmentUpdateRideBinding.inflate(layoutInflater)
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
+
+        // Create a MaterialAlertDialogBuilder instance.
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        customAlertDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_update_ride, binding.root, false)
+
+
+
     }
 
     /**
@@ -102,7 +146,7 @@ class UpdateRideFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentUpdateRideBinding.inflate(inflater, container, false)
+        binding = FragmentUpdateRideBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -115,7 +159,7 @@ class UpdateRideFragment : Fragment() {
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //binding = null
     }
 
     /**
@@ -161,4 +205,6 @@ class UpdateRideFragment : Fragment() {
     private fun showMessage() {
         Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
     }
+
+
 }

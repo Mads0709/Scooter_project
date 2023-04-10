@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_mainFragment_to_deleteRideFragment"
             app:destination="@id/deleteRideFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_fragmentListScooters"
+            app:destination="@id/fragmentListScooters" />
     </fragment>
 
     <fragment
@@ -36,4 +39,9 @@
             android:id="@+id/action_deleteRideFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/fragmentListScooters"
+        android:name="dk.itu.moapd.scootersharing.mgan.fragments.FragmentListScooters"
+        android:label="ListScootersFragment"
+    />
 </navigation>

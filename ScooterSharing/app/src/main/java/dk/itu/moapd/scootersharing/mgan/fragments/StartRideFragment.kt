@@ -26,18 +26,18 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.firebase.ui.auth.data.model.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ktx.database
+import com.google.firebase.database.*
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
+
 
 /**
  * An fragment class with methods to manage the main fragment of the ScooterSharing application.
@@ -220,34 +220,4 @@ class StartRideFragment : Fragment() {
             .show()
     }
 
-    /**
-     * Building the update alert dialog using the `MaterialAlertDialogBuilder` instance. This method
-     * shows a dialog with a single edit text. The user can type a name and add it to the text file
-     * dataset or cancel the operation.
-     *
-     * @param dummy An instance of `Dummy` class.
-     */
-    private fun launchUpdateAlertDialog(scooter: Scooter, position: Int) {
-        // Get the edit text component.
-        val editTextName = customAlertDialogView
-            .findViewById<TextInputEditText>(R.id.edit_text_name)
-        editTextName?.setText(scooter.name)
-
-        materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle(getString(R.string.dialog_update_title))
-            .setMessage(getString(R.string.dialog_update_message))
-            .setPositiveButton(getString(R.string.update_button)) { dialog, _ ->
-                val name = editTextName?.text.toString()
-                if (name.isNotEmpty()) {
-                    scooter.name = name
-                    scooter.timestamp = System.currentTimeMillis().toString()
-                    adapter.getRef(position).setValue(scooter)
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.cancel_button)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
 }
