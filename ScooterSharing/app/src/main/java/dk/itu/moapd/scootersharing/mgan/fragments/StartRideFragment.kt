@@ -31,6 +31,8 @@ import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ktx.database
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
@@ -96,6 +98,10 @@ class StartRideFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = FragmentStartRideBinding.inflate(layoutInflater)
+        auth = FirebaseAuth.getInstance()
+        database = FirebaseDatabase.getInstance().reference
+
+
 
         // Create a MaterialAlertDialogBuilder instance.
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
