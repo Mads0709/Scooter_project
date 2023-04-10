@@ -71,15 +71,7 @@ class MainFragment : Fragment(), ItemClickListener {
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
-    /**
-     * Inflates a custom Android layout used in the input dialog.
-     */
-    private lateinit var customAlertDialogView: View
-    /**
-     * An extension of `AlertDialog.Builder` to create custom dialogs using a Material theme (e.g.,
-     * Theme.MaterialComponents).
-     */
-    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -101,7 +93,6 @@ class MainFragment : Fragment(), ItemClickListener {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ridesDB = RidesDB.get(requireContext())
 
         // Initialize Firebase Auth.
         auth = FirebaseAuth.getInstance()
@@ -215,6 +206,8 @@ class MainFragment : Fragment(), ItemClickListener {
         startActivity(intent)
         activity?.finish()
     }
+
+
 
     override fun onItemClickListener(scooter: Scooter, position: Int) {
         TODO("Not yet implemented")

@@ -26,8 +26,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
+import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
 
 /**
@@ -40,6 +47,7 @@ class StartRideFragment : Fragment() {
      */
     companion object{
         lateinit var ridesDB : RidesDB
+        private lateinit var adapter: CustomArrayAdapter
     }
 
     /**
@@ -49,9 +57,23 @@ class StartRideFragment : Fragment() {
      * to all views that have an ID in the corresponding layout.
      */
 
-    private var _binding: FragmentStartRideBinding? = null
-    private val binding
-        get() = checkNotNull(_binding)
+    //private var _binding: FragmentStartRideBinding
+    private lateinit var binding: FragmentStartRideBinding
+       // get() = checkNotNull(_binding)
+
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
+    /**
+     * Inflates a custom Android layout used in the input dialog.
+     */
+    private lateinit var customAlertDialogView: View
+
+    /**
+     * An extension of `AlertDialog.Builder` to create custom dialogs using a Material theme (e.g.,
+     * Theme.MaterialComponents).
+     */
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -73,7 +95,13 @@ class StartRideFragment : Fragment() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ridesDB = RidesDB.get(requireContext())
+        binding = FragmentStartRideBinding.inflate(layoutInflater)
+
+        // Create a MaterialAlertDialogBuilder instance.
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
+        customAlertDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_start_ride, binding.root, false)
+        launchCustomAlertDialog()
+
     }
 
     /**
@@ -102,7 +130,7 @@ class StartRideFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentStartRideBinding.inflate(inflater, container, false)
+        binding = FragmentStartRideBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -115,7 +143,7 @@ class StartRideFragment : Fragment() {
      */
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
     }
 
     /**
@@ -130,31 +158,90 @@ class StartRideFragment : Fragment() {
      */
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        with(binding) {
-            startRideButton.setOnClickListener{
-                if (nameTextFieldEdit.text?.isNotEmpty() == true && locationTextFieldEdit.text?.isNotEmpty() == true) {
 
-                    //Update the scooter attributes
-
-                    val name = nameTextFieldEdit.text.toString().trim()
-                    val location = locationTextFieldEdit.text.toString().trim()
-                    //set the name and location of the given values
-                    //ridesDB.addScooter(name,location)
-
-                    //show text in log
-                    nameTextFieldEdit.setText("")
-                    locationTextFieldEdit.setText("")
-                    showMessage()
-                }
-            }
-        }
+            // Launching the custom alert dialog
+           // launchCustomAlertDialog()
 
     }
+
 
     /**
      * making the snackbar popup that interacts with the xml and displays the scooter toString() method in the snakcbar
      */
     private fun showMessage() {
         Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
+    }
+
+    private fun launchCustomAlertDialog() {
+        // Get the edit text component.
+        val editTextName = customAlertDialogView.findViewById<TextInputEditText>(R.id.edit_text_name)
+        //val editTextLocation = customAlertDialogView.findViewById<TextInputEditText>(R.id.edit_text_location)
+
+        // Show the dialog to the user.
+        materialAlertDialogBuilder.setView(customAlertDialogView)
+            .setTitle(getString(R.string.dialog_title))
+            .setMessage(getString(R.string.dialog_message))
+            .setPositiveButton(getString(R.string.add_button)) { dialog, _ ->
+
+                // Create the `Scooter` object using the name typed by the user.
+                val name = editTextName.text.toString()
+                //val location = editTextLocation.text.toString()
+
+                if (name.isNotEmpty()) {
+                    val timestamp = System.currentTimeMillis().toString()
+                    val scooter = Scooter(false, "location", name, timestamp)
+                    // In the case of authenticated user, create a new unique key for the object in
+                    // the database.
+                    auth.currentUser?.let { user ->
+                        val uid = database.child("scooters")
+                            .push()
+                            .key
+
+                        // Insert the object in the database.
+                        uid?.let {
+                            database.child("scooters")
+                                .child(it)
+                                .setValue(scooter)
+                        }
+                    }
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel_button)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setCancelable(false)
+            .show()
+    }
+
+    /**
+     * Building the update alert dialog using the `MaterialAlertDialogBuilder` instance. This method
+     * shows a dialog with a single edit text. The user can type a name and add it to the text file
+     * dataset or cancel the operation.
+     *
+     * @param dummy An instance of `Dummy` class.
+     */
+    private fun launchUpdateAlertDialog(scooter: Scooter, position: Int) {
+        // Get the edit text component.
+        val editTextName = customAlertDialogView
+            .findViewById<TextInputEditText>(R.id.edit_text_name)
+        editTextName?.setText(scooter.name)
+
+        materialAlertDialogBuilder.setView(customAlertDialogView)
+            .setTitle(getString(R.string.dialog_update_title))
+            .setMessage(getString(R.string.dialog_update_message))
+            .setPositiveButton(getString(R.string.update_button)) { dialog, _ ->
+                val name = editTextName?.text.toString()
+                if (name.isNotEmpty()) {
+                    scooter.name = name
+                    scooter.timestamp = System.currentTimeMillis().toString()
+                    adapter.getRef(position).setValue(scooter)
+                }
+                dialog.dismiss()
+            }
+            .setNegativeButton(getString(R.string.cancel_button)) { dialog, _ ->
+                dialog.dismiss()
+            }
+            .show()
     }
 }
