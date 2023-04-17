@@ -1,5 +1,6 @@
 package dk.itu.moapd.scootersharing.mgan.adapter
 
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -24,9 +25,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
                          options: FirebaseRecyclerOptions<Scooter>) :
     FirebaseRecyclerAdapter<Scooter, CustomArrayAdapter.ViewHolder>(options) {
 
-    // Get the public thumbnail URL.
-    val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
-    val imageRef = storage.reference.child("scooters").child("scooter.jpg")
+
 
     // Download and set an image into the ImageView.
     /**
@@ -37,12 +36,25 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
     class ViewHolder(private val binding: ListRidesBinding) :
         RecyclerView.ViewHolder(binding.root){
 
-        private lateinit var auth: FirebaseAuth
-        private lateinit var database: DatabaseReference
+
         fun bind(scooter : Scooter){
-            binding.listItemName.text = scooter.name
+           binding.listItemName.text = scooter.name
            binding.listItemLocation.text = scooter.location
            binding.listItemTimestamp.text = scooter.timestamp.toString()
+
+            // Get the public thumbnail URL.
+            val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
+            val imageRef = storage.reference.child("scooters").child("scooter.jpg")
+
+
+            // Download and set an image into the ImageView.
+            imageRef.downloadUrl.addOnSuccessListener {
+                Glide.with(itemView.context)
+                    .load(it)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .centerCrop()
+                    .into(binding.listItemImageId)
+            }
         }
 
     }
@@ -66,6 +78,8 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
             }
         }
     }
+
+
 
 
 
