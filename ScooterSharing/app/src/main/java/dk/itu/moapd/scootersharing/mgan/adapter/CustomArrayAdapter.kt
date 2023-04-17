@@ -3,8 +3,14 @@ package dk.itu.moapd.scootersharing.mgan.adapter
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.firebase.ui.database.FirebaseRecyclerAdapter
 import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.databinding.ListRidesBinding
@@ -18,16 +24,25 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
                          options: FirebaseRecyclerOptions<Scooter>) :
     FirebaseRecyclerAdapter<Scooter, CustomArrayAdapter.ViewHolder>(options) {
 
+    // Get the public thumbnail URL.
+    val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
+    val imageRef = storage.reference.child("scooters").child("scooter.jpg")
+
+    // Download and set an image into the ImageView.
     /**
      * An internal view holder class used to represent the layout that shows a single `Scooter`
      * instance in the `ListView`.
      */
+
     class ViewHolder(private val binding: ListRidesBinding) :
         RecyclerView.ViewHolder(binding.root){
+
+        private lateinit var auth: FirebaseAuth
+        private lateinit var database: DatabaseReference
         fun bind(scooter : Scooter){
             binding.listItemName.text = scooter.name
-            binding.listItemLocation.text = scooter.location
-            binding.listItemTimestamp.text = scooter.timestamp.toString()
+           binding.listItemLocation.text = scooter.location
+           binding.listItemTimestamp.text = scooter.timestamp.toString()
         }
 
     }
@@ -41,6 +56,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
         return ViewHolder(binding)
     }
 
+
     override fun onBindViewHolder(holder: ViewHolder, position: Int, scooter: Scooter) {
         holder.apply {
             bind(scooter)
@@ -50,6 +66,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
             }
         }
     }
+
 
 
     //override fun getItemCount() = data.getRidesList().size

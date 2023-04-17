@@ -5,53 +5,78 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import dk.itu.moapd.scootersharing.mgan.ARG_PARAM1
-import dk.itu.moapd.scootersharing.mgan.ARG_PARAM2
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.firebase.ui.database.FirebaseRecyclerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.ktx.database
+import com.google.firebase.ktx.Firebase
 import dk.itu.moapd.scootersharing.mgan.R
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
+import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
+import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentListScootersBinding
+import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
  * A simple [Fragment] subclass.
  * Use the [FragmentListScooters.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FragmentListScooters : Fragment() {
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+class FragmentListScooters : Fragment(), ItemClickListener {
+
+    companion object{
+        private lateinit var adapter: CustomArrayAdapter
+    }
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
+
+    private var _binding: FragmentListScootersBinding? = null
+    private val binding
+        get() = checkNotNull(_binding)
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+        // Initialize Firebase Auth.
+        auth = FirebaseAuth.getInstance()
+        // intialize firebase realtime
+        database =
+            Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
+        //customAlertDialogView = LayoutInflater.from(requireContext())
+        //  .inflate(R.layout.fragment_update_ride, binding.root, false)
+
+        auth.currentUser?.let {
+            val query = database.child("scooters")
+                .orderByChild("createdAt")
+            val options = FirebaseRecyclerOptions.Builder<Scooter>()
+                .setQuery(query, Scooter::class.java)
+                .setLifecycleOwner(this)
+                .build()
+            //Create the custom adapter to populate the adapter
+            adapter = CustomArrayAdapter(this, options)
         }
     }
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_scooters, container, false)
+        override fun onCreateView(
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
+        ): View? {
+            // Inflate the layout for this fragment
+            _binding = FragmentListScootersBinding.inflate(inflater, container, false)
+            return binding.root
+        }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+        binding.recyclerView.adapter = adapter
     }
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment FragmentListScooters.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            FragmentListScooters().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
-            }
+    override fun onItemClickListener(dummy: Scooter, position: Int) {
+        TODO("Not yet implemented")
     }
 }
+

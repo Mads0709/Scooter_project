@@ -36,6 +36,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.LoginActivity
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
@@ -71,8 +73,10 @@ class MainFragment : Fragment(), ItemClickListener {
 
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
-    private lateinit var customAlertDialogView: View
-    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+    /**
+     * The entry point of the Firebase Storage SDK.
+     */
+    private lateinit var storage: FirebaseStorage
 
 
 
@@ -101,8 +105,8 @@ class MainFragment : Fragment(), ItemClickListener {
         auth = FirebaseAuth.getInstance()
         // intialize firebase realtime
         database = Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
-        //customAlertDialogView = LayoutInflater.from(requireContext())
-          //  .inflate(R.layout.fragment_update_ride, binding.root, false)
+        storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
+
 
         auth.currentUser?.let {
             val query = database.child("scooters")
@@ -197,12 +201,13 @@ class MainFragment : Fragment(), ItemClickListener {
                     true
                 }
 
-                //showListButton.setOnClickListener{
+                showListButton.setOnClickListener{
                     //Action
-                    binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                    binding.recyclerView.adapter = adapter
+                    findNavController().navigate(R.id.action_mainFragment_to_fragmentListScooters)
 
-                //}
+                }
+                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
+                binding.recyclerView.adapter = adapter
             }
     }
 
