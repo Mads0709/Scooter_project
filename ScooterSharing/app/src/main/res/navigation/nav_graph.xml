@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_mainFragment_to_fragmentListScooters"
             app:destination="@id/fragmentListScooters" />
+        <action
+            android:id="@+id/action_mainFragment_to_fragmentMap"
+            app:destination="@id/fragmentMap" />
     </fragment>
 
     <fragment
@@ -44,4 +47,11 @@
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.FragmentListScooters"
         android:label="ListScootersFragment"
     />
+    <fragment
+        android:id="@+id/fragmentMap"
+        android:name="dk.itu.moapd.scootersharing.mgan.fragments.MapFragment"
+        android:label="MapFragment"
+        />
+
+
 </navigation>

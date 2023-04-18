@@ -62,7 +62,6 @@ class MainFragment : Fragment(), ItemClickListener {
     companion object{
         lateinit var ridesDB : RidesDB
         private lateinit var adapter: CustomArrayAdapter
-        private const val ALL_PERMISSIONS_RESULT = 1011
     }
 
     /**
@@ -82,17 +81,6 @@ class MainFragment : Fragment(), ItemClickListener {
      * The entry point of the Firebase Storage SDK.
      */
     private lateinit var storage: FirebaseStorage
-
-    /**
-     * The primary instance for receiving location updates.
-     */
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    /**
-     * This callback is called when `FusedLocationProviderClient` has a new `Location`.
-     */
-    private lateinit var locationCallback: LocationCallback
-
 
 
 
@@ -123,9 +111,6 @@ class MainFragment : Fragment(), ItemClickListener {
         database = Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
         storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
 
-        // Start the location-aware method.
-        startLocationAware()
-
 
         auth.currentUser?.let {
             val query = database.child("scooters")
@@ -139,85 +124,10 @@ class MainFragment : Fragment(), ItemClickListener {
         }
     }
 
-    private fun startLocationAware() {
-
-        // Show a dialog to ask the user to allow the application to access the device's location.
-        requestUserPermissions()
-
-        // Start receiving location updates.
-        fusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(requireActivity())
-
-        // Initialize the `LocationCallback`.
-        locationCallback = object : LocationCallback() {
-
-            /**
-             * This method will be executed when `FusedLocationProviderClient` has a new location.
-             *
-             * @param locationResult The last known location.
-             */
-            /*
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-
-                // Updates the user interface components with GPS data location.
-                locationResult.lastLocation?.let { location ->
-                    updateUI(location)
-                }
-            }
-
-             */
-        }
-    }
 
     /**
      * Create a set of dialogs to show to the users and ask them for permissions to get the device's
      * resources.
-     */
-    private fun requestUserPermissions() {
-
-        // An array with location-aware permissions.
-        val permissions: ArrayList<String> = ArrayList()
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        // Check which permissions is needed to ask to the user.
-        val permissionsToRequest = permissionsToRequest(permissions)
-
-        // Show the permissions dialogs to the user.
-        if (permissionsToRequest.size > 0)
-            requestPermissions(
-                permissionsToRequest.toTypedArray(),
-                ALL_PERMISSIONS_RESULT
-            )
-    }
-
-    /**
-     * Create an array with the permissions to show to the user.
-     *
-     * @param permissions An array with the permissions needed by this applications.
-     *
-     * @return An array with the permissions needed to ask to the user.
-     */
-    private fun permissionsToRequest(permissions: ArrayList<String>): ArrayList<String> {
-        val result: ArrayList<String> = ArrayList()
-        for (permission in permissions)
-            if (checkSelfPermission(requireContext(),permission) != PermissionChecker.PERMISSION_GRANTED)
-                result.add(permission)
-        return result
-    }
-
-    /*private fun updateUI(location: Location) {
-        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
-            binding.contentMain.apply {
-                latitudeTextField?.editText?.setText(location.latitude.toString())
-                longitudeTextField?.editText?.setText(location.longitude.toString())
-                timeTextField?.editText?.setText(location.time.toDateString())
-            }
-        else
-            setAddress(location.latitude, location.longitude)
-    }
-
      */
 
 
@@ -302,6 +212,9 @@ class MainFragment : Fragment(), ItemClickListener {
                     startLoginActivity()
                     true
                 }
+                showMap.setOnClickListener{
+                    findNavController().navigate(R.id.action_mainFragment_to_fragmentMap)
+                }
 
                 showListButton.setOnClickListener{
                     //Action
@@ -358,7 +271,6 @@ class MainFragment : Fragment(), ItemClickListener {
             }
             .show()
     }
-
 
     */
 
