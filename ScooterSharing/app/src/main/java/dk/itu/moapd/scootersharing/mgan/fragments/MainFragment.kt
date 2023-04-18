@@ -21,10 +21,10 @@
 
 package dk.itu.moapd.scootersharing.mgan.fragments
 
+import android.Manifest
 import android.content.Intent
-import android.location.Geocoder
+import android.content.res.Configuration
 import android.location.Location
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -34,20 +34,14 @@ import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ktx.database
 import com.firebase.ui.database.FirebaseRecyclerOptions
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
-import dk.itu.moapd.scootersharing.mgan.Manifest
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.LoginActivity
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
@@ -129,6 +123,9 @@ class MainFragment : Fragment(), ItemClickListener {
         database = Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
         storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
 
+        // Start the location-aware method.
+        startLocationAware()
+
 
         auth.currentUser?.let {
             val query = database.child("scooters")
@@ -149,7 +146,7 @@ class MainFragment : Fragment(), ItemClickListener {
 
         // Start receiving location updates.
         fusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(this)
+            .getFusedLocationProviderClient(requireActivity())
 
         // Initialize the `LocationCallback`.
         locationCallback = object : LocationCallback() {
@@ -159,6 +156,7 @@ class MainFragment : Fragment(), ItemClickListener {
              *
              * @param locationResult The last known location.
              */
+            /*
             override fun onLocationResult(locationResult: LocationResult) {
                 super.onLocationResult(locationResult)
 
@@ -167,6 +165,8 @@ class MainFragment : Fragment(), ItemClickListener {
                     updateUI(location)
                 }
             }
+
+             */
         }
     }
 
@@ -206,6 +206,19 @@ class MainFragment : Fragment(), ItemClickListener {
                 result.add(permission)
         return result
     }
+
+    /*private fun updateUI(location: Location) {
+        if (resources.configuration.orientation == Configuration.ORIENTATION_PORTRAIT)
+            binding.contentMain.apply {
+                latitudeTextField?.editText?.setText(location.latitude.toString())
+                longitudeTextField?.editText?.setText(location.longitude.toString())
+                timeTextField?.editText?.setText(location.time.toDateString())
+            }
+        else
+            setAddress(location.latitude, location.longitude)
+    }
+
+     */
 
 
 
