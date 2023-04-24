@@ -20,18 +20,22 @@ import android.os.Looper
 import dk.itu.moapd.scootersharing.mgan.R
 import com.google.android.gms.location.*
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
 
+
 /**
  * A simple [Fragment] subclass.
  * Use the [MapFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MapFragment : Fragment() {
+class MapFragment : Fragment(), OnMapReadyCallback {
 
     companion object {
         private const val ALL_PERMISSIONS_RESULT = 1011
@@ -64,8 +68,13 @@ class MapFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Start the location-aware method.
-        startLocationAware()
+
+        // Obtain the `SupportMapFragment` and get notified when the map is ready to be used.
+        val mapFragment = parentFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+
+        //setContentView(R.layout.fragment_map)     // Start the location-aware method.
+     // startLocationAware()
 
     }
 
@@ -238,6 +247,34 @@ class MapFragment : Fragment() {
         // Unsubscribe to location changes.
         fusedLocationProviderClient
             .removeLocationUpdates(locationCallback)
+    }
+
+    override fun onMapReady(googleMap: GoogleMap) {
+
+        // Check if the user allows the application to access the location-aware resources.
+        if (checkPermission())
+            return
+
+        // Show the current device's location as a blue dot.
+        googleMap.isMyLocationEnabled = true
+
+        // Set the default map type.
+        googleMap.mapType = GoogleMap.MAP_TYPE_HYBRID
+
+        // Setup the UI settings state.
+        googleMap.uiSettings.apply {
+            isCompassEnabled = true
+            isIndoorLevelPickerEnabled = true
+            isMyLocationButtonEnabled = true
+            isRotateGesturesEnabled = true
+            isScrollGesturesEnabled = true
+            isTiltGesturesEnabled = true
+            isZoomControlsEnabled = true
+            isZoomGesturesEnabled = true
+        }
+
+        // Move the Google Maps UI buttons under the OS top bar.
+        googleMap.setPadding(0, 100, 0, 0)
     }
 
 
