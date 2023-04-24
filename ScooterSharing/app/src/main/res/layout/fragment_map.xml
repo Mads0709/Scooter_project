@@ -4,9 +4,6 @@
     android:layout_height="match_parent"
     android:gravity="center"
     android:orientation="vertical">
-
-    <include layout="@layout/content_map" />
-
     <TextView
         android:id="@+id/latitude_text_view"
         android:layout_width="match_parent"
@@ -96,6 +93,6 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
-
+    <include layout="@layout/content_map" />
 
 </LinearLayout>
