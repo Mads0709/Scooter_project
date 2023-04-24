@@ -20,9 +20,12 @@ import android.os.Looper
 import dk.itu.moapd.scootersharing.mgan.R
 import com.google.android.gms.location.*
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import java.text.SimpleDateFormat
@@ -35,7 +38,12 @@ import kotlin.collections.ArrayList
  * Use the [MapFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class MapFragment : Fragment(), OnMapReadyCallback {
+class MapFragment : Fragment() {
+    private val callback = OnMapReadyCallback {googleMap ->
+        val amager = LatLng(55.6590778, 12.5908447)
+        googleMap.addMarker(MarkerOptions().position(amager).title("Marker in Amager"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(amager))
+    }
 
     companion object {
         private const val ALL_PERMISSIONS_RESULT = 1011
@@ -64,19 +72,21 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         unsubscribeToLocationUpdates()
     }
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // Obtain the `SupportMapFragment` and get notified when the map is ready to be used.
-        val mapFragment = parentFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment
-        mapFragment.getMapAsync(this)
-
-        //setContentView(R.layout.fragment_map)     // Start the location-aware method.
-     // startLocationAware()
-
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentMapBinding.inflate(inflater, container, false)
+        return binding.root
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
+        mapFragment?.getMapAsync(callback)
+    }
+
+
 
     private fun startLocationAware() {
 
@@ -249,6 +259,7 @@ class MapFragment : Fragment(), OnMapReadyCallback {
             .removeLocationUpdates(locationCallback)
     }
 
+    /*
     override fun onMapReady(googleMap: GoogleMap) {
 
         // Check if the user allows the application to access the location-aware resources.
@@ -277,17 +288,13 @@ class MapFragment : Fragment(), OnMapReadyCallback {
         googleMap.setPadding(0, 100, 0, 0)
     }
 
+     */
 
 
 
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        _binding = FragmentMapBinding.inflate(inflater, container, false)
-        return binding.root
-    }
+
+
 
 
 }

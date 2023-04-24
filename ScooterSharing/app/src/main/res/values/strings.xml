@@ -43,6 +43,4 @@
     <string name="address_text">Address</string>
     <string name="content_description_location">Location</string>
 
-    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyCrwZfVXJqqKzufvW_6mbl1YnH0w3ZBtdA</string>
-
 </resources>
