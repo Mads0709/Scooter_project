@@ -35,7 +35,8 @@ data class Scooter (
     var isUsed: Boolean? = null,
     var location: String? = null,
     var name : String? = null,
-    var timestamp: String? = null
+    var timestamp: String? = null,
+    var last_photo: String? = null
     )
 
     /**

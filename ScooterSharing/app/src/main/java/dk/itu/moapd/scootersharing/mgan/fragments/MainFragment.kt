@@ -215,6 +215,9 @@ class MainFragment : Fragment(), ItemClickListener {
                 showMap.setOnClickListener{
                     findNavController().navigate(R.id.action_mainFragment_to_fragmentMap)
                 }
+                pictureButton.setOnClickListener{
+                    findNavController().navigate(R.id.action_mainFragment_to_fragmentPicture)
+                }
 
                 showListButton.setOnClickListener{
                     //Action

@@ -15,9 +15,27 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.ScooterSharing"
         tools:targetApi="31">
+        <service
+            android:name=".services.GeolocationService"
+            android:enabled="true"
+            android:exported="true">
+
+        </service>
+
+
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="dk.itu.moapd.scootersharing.mgan.fragments.Picture_fragment"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/files"/>
+        </provider>
 
         <!--
-             TODO: Before you run your application, you need a Google Maps API key.
+
 
              To get one, follow the directions here:
 

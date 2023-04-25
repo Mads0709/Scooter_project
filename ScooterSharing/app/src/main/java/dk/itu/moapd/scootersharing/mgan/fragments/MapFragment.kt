@@ -1,8 +1,10 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.Manifest
-import android.content.pm.PackageManager
-import android.content.res.Configuration
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
@@ -11,26 +13,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.PermissionChecker
-import androidx.fragment.app.Fragment
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationServices
-import android.location.Address
-import android.os.Looper
-import dk.itu.moapd.scootersharing.mgan.R
-import com.google.android.gms.location.*
 import androidx.core.content.PermissionChecker.checkSelfPermission
+import androidx.fragment.app.Fragment
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
+import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
+import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
 
 
 /**
@@ -41,13 +36,17 @@ import kotlin.collections.ArrayList
 class MapFragment : Fragment() {
     private val callback = OnMapReadyCallback {googleMap ->
         val amager = LatLng(55.6590778, 12.5908447)
-        googleMap.addMarker(MarkerOptions().position(amager).title("Marker in Amager"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLng(amager))
+        googleMap.addMarker(MarkerOptions().position(amager).title("Marker at ITU"))
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(amager, 18f))
     }
 
     companion object {
         private const val ALL_PERMISSIONS_RESULT = 1011
     }
+
+    // The BroadcastReceiver used to listen from broadcasts from the service.
+    private var myReceiver: MyReceiver? = null
+
 
     private var _binding: FragmentMapBinding? = null
     private val binding
@@ -62,14 +61,25 @@ class MapFragment : Fragment() {
      */
     private lateinit var locationCallback: LocationCallback
 
+    private lateinit var receiver : BroadcastReceiver
+
     override fun onResume() {
         super.onResume()
-        subscribeToLocationUpdates()
+        Intent(context, GeolocationService::class.java).also{ intent ->
+            context?.startService(intent)
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        unsubscribeToLocationUpdates()
+        Intent(context, GeolocationService::class.java).also{ intent ->
+            context?.stopService(intent)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        myReceiver = MyReceiver()
     }
 
     override fun onCreateView(
@@ -93,7 +103,6 @@ class MapFragment : Fragment() {
 
         // Show a dialog to ask the user to allow the application to access the device's location.
         requestUserPermissions()
-
         // Start receiving location updates.
         fusedLocationProviderClient = LocationServices
             .getFusedLocationProviderClient(requireActivity())
@@ -217,85 +226,18 @@ class MapFragment : Fragment() {
     }
 
     /**
-     * This method checks if the user allows the application uses all location-aware resources to
-     * monitor the user's location.
-     *
-     * @return A boolean value with the user permission agreement.
+     * Receiver for broadcasts sent by [LocationUpdatesService].
      */
-    private fun checkPermission() =
-        checkSelfPermission(
-            requireContext(), Manifest.permission.ACCESS_FINE_LOCATION
-        ) != PermissionChecker.PERMISSION_GRANTED &&
-                checkSelfPermission(
-                    requireContext(), Manifest.permission.ACCESS_COARSE_LOCATION
-                ) != PermissionChecker.PERMISSION_GRANTED
+    private class MyReceiver : BroadcastReceiver() {
 
-
-    /**
-     * Subscribes this application to get the location changes via the `locationCallback()`.
-     */
-    private fun subscribeToLocationUpdates() {
-
-        // Check if the user allows the application to access the location-aware resources.
-        if (checkPermission())
-            return
-
-        // Sets the accuracy and desired interval for active location updates.
-        val locationRequest = LocationRequest
-            .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5)
-            .build()
-
-        // Subscribe to location changes.
-        fusedLocationProviderClient.requestLocationUpdates(
-            locationRequest, locationCallback, Looper.getMainLooper()
-        )
-    }
-
-    /**
-     * Unsubscribes this application of getting the location changes from  the `locationCallback()`.
-     */
-    private fun unsubscribeToLocationUpdates() {
-        // Unsubscribe to location changes.
-        fusedLocationProviderClient
-            .removeLocationUpdates(locationCallback)
-    }
-
-    /*
-    override fun onMapReady(googleMap: GoogleMap) {
-
-        // Check if the user allows the application to access the location-aware resources.
-        if (checkPermission())
-            return
-
-        // Show the current device's location as a blue dot.
-        googleMap.isMyLocationEnabled = true
-
-        // Set the default map type.
-        googleMap.mapType = GoogleMap.MAP_TYPE_HYBRID
-
-        // Setup the UI settings state.
-        googleMap.uiSettings.apply {
-            isCompassEnabled = true
-            isIndoorLevelPickerEnabled = true
-            isMyLocationButtonEnabled = true
-            isRotateGesturesEnabled = true
-            isScrollGesturesEnabled = true
-            isTiltGesturesEnabled = true
-            isZoomControlsEnabled = true
-            isZoomGesturesEnabled = true
+        private var mlocation : Location? = null
+        override fun onReceive(context: Context?, intent: Intent) {
+            val location =
+                intent.getParcelableExtra<Location>(GeolocationService.EXTRA_LOCATION)
+            if (location != null) {
+                mlocation = location
+            }
         }
-
-        // Move the Google Maps UI buttons under the OS top bar.
-        googleMap.setPadding(0, 100, 0, 0)
     }
-
-     */
-
-
-
-
-
-
-
 
 }
