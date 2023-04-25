@@ -12,6 +12,9 @@ import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModel
 import dk.itu.moapd.scootersharing.mgan.R
+import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
+import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
+import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import java.io.File
 import java.util.*
@@ -23,14 +26,16 @@ import kotlin.math.roundToInt
  * Use the [Picture_fragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class Picture_fragment : Fragment() {
+class Picture_fragment : Fragment(), ItemClickListener {
     private var _binding: FragmentPictureFragmentBinding? = null
     private val binding
         get() = checkNotNull(_binding)
 
-    private lateinit var viewModel :ViewModel
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
 
 
     }
@@ -47,16 +52,16 @@ class Picture_fragment : Fragment() {
     private val takePhoto = registerForActivityResult(
         ActivityResultContracts.TakePicture()
     ) { didTakePhoto ->
-
+        updatePhoto(photoName)
 
     }
     private var photoName: String? = null
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-                val photoName = "IMG_${Date()}.JPG"
+                photoName = "IMG_${Date()}.JPG"
                 val photoFile = File(requireContext().applicationContext.filesDir,
                     photoName)
                 val photoUri = FileProvider.getUriForFile(
@@ -66,6 +71,7 @@ class Picture_fragment : Fragment() {
                 )
                 takePhoto.launch(photoUri)
                 updatePhoto(photoName)
+
             }
 
     private fun updatePhoto(photoFileName: String?) {
@@ -110,6 +116,10 @@ class Picture_fragment : Fragment() {
         return BitmapFactory.decodeFile(path, BitmapFactory.Options().apply {
             inSampleSize = sampleSize
         })
+    }
+
+    override fun onItemClickListener(dummy: Scooter, position: Int) {
+        TODO("Not yet implemented")
     }
 
 }

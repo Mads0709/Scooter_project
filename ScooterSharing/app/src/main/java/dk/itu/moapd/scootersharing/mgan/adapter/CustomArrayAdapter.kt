@@ -42,6 +42,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
            binding.listItemLocation.text = scooter.location
            binding.listItemTimestamp.text = scooter.timestamp.toString()
 
+
             // Get the public thumbnail URL.
             val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
             val imageRef = storage.reference.child("scooters").child("scooter.jpg")
