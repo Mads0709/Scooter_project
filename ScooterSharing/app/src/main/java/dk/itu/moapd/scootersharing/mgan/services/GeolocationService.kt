@@ -1,124 +1,71 @@
 package dk.itu.moapd.scootersharing.mgan.services
 
 import android.Manifest
-import android.app.Service
+import android.app.*
 import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.os.Build
-import android.os.IBinder
-import android.os.Looper
+import android.os.*
+import android.util.Log
 import androidx.core.content.PermissionChecker
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
-import com.google.android.gms.tasks.OnCompleteListener
 import java.util.*
 
 
+/*
+This CODE is inspired from https://github.com/android/location-samples/blob/432d3b72b8c058f220416958b444274ddd186abd/LocationUpdatesForegroundService/app/src/main/java/com/google/android/gms/location/sample/locationupdatesforegroundservice/LocationUpdatesService.java
+by frankgh
+ */
 class GeolocationService : Service() {
-
     /**
-     * The primary instance for receiving location updates.
+     * Provides access to the Fused Location Provider API.
      */
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
-
-    /**
-     * The current location.
-     */
-    private var mLocation: Location? = null
+    private lateinit var mFusedLocationClient: FusedLocationProviderClient
 
     /**
      * Callback for changes in location.
      */
     private lateinit var mLocationCallback: LocationCallback
 
+    private var updateFunc: (Double, Double, String) -> Unit = {_: Double, _: Double, _: String -> }
+
     companion object {
         private const val PACKAGENAME = "dk.itu.moapd.scootersharing.mgan.services"
+        val EXTRA_LOCATION: String = PACKAGENAME + ".location"
 
         val ACTION_BROADCAST: String = PACKAGENAME + ".broadcast"
 
-        val EXTRA_LOCATION: String = PACKAGENAME + ".location"
+        private const val  EXTRA_STARTED_FROM_NOTIFICATION: String = PACKAGENAME + ".started_from_notification";
+        val TAG = GeolocationService::class.java.simpleName
+        private const val KEY_REQUESTING_LOCATION_UPDATES = "requesting location updates"
+
+
+        /**
+         * The desired interval for location updates. Inexact. Updates may be more or less frequent.
+         */
+        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
+
+        /**
+         * The fastest rate for active location updates. Updates will never be more frequent
+         * than this value.
+         */
+        private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
 
     }
-
-    /**
-     * This callback is called when `FusedLocationProviderClient` has a new `Location`.
-     */
-    /*
-    private var locationCallback = object : LocationCallback() {
-
-        override fun onLocationResult(locationResult: LocationResult) {
-          super.onLocationResult(locationResult)
-
-            // Updates the user interface components with GPS data location.
-            locationResult.lastLocation?.let { location ->
-                onNewLocation(locationResult.lastLocation);
-
-                //Intent(requireContext(), MapFragment::class.java)
-
-
-            }
-        }
+    override fun onBind(intent: Intent?): IBinder? {
+        // Called when a client (MainActivity in case of this sample) comes to the foreground
+        // and binds with this service. The service should cease to be a foreground service
+        // when that happens.
+        Log.i(TAG, "in onBind()")
+        startLocationAware()
+        return LocalBinder()
     }
 
-     */
-
-    override fun onCreate() {
-        super.onCreate()
-        // Start receiving location updates.
-        fusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(this)
-
-        mLocationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-                onNewLocation(locationResult.lastLocation!!)
-            }
-        }
-        subscribeToLocationUpdates()
-        getLastLocation()
-
+    inner class LocalBinder : Binder() {
+        fun getService(): GeolocationService = this@GeolocationService
     }
 
-
-    override fun onDestroy() {
-        super.onDestroy()
-        unsubscribeToLocationUpdates()
-    }
-
-    override fun onBind(intent: Intent): IBinder {
-        TODO("Return the communication channel to the service.")
-    }
-
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        super.onStartCommand(intent, flags, startId)
-        return START_STICKY
-    }
-
-    private fun getLastLocation() {
-        // Start receiving location updates.
-        fusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(this)
-
-        if (checkPermission())
-            fusedLocationProviderClient.lastLocation
-                .addOnCompleteListener(OnCompleteListener { task ->
-                    if (task.isSuccessful && task.result != null) {
-                        mLocation = task.result
-                    }
-                })
-    }
-
-
-    private fun onNewLocation(location : Location){
-        val mlocation = location
-        // Notify anyone listening for broadcasts about the new location.
-        // Notify anyone listening for broadcasts about the new location.
-        val intent = Intent(ACTION_BROADCAST)
-        intent.putExtra(EXTRA_LOCATION, location)
-        LocalBroadcastManager.getInstance(applicationContext).sendBroadcast(intent)
-    }
 
     private fun setAddress(latitude: Double, longitude: Double) {
         if (!Geocoder.isPresent())
@@ -127,24 +74,25 @@ class GeolocationService : Service() {
         // Create the `Geocoder` instance.
         val geocoder = Geocoder(this, Locale.getDefault())
 
-        // After `Tiramisu Android OS`, it is needed to use a listener to avoid blocking the main
-        // thread waiting for results.
-        val geocodeListener = Geocoder.GeocodeListener { addresses ->
-            addresses.firstOrNull()?.toAddressString()?.let { address ->
-                //binding.addressTextField?.editText?.setText(address)
-            }
-
-        }
-
 
         // Return an array of Addresses that attempt to describe the area immediately surrounding
         // the given latitude and longitude.
-        if (Build.VERSION.SDK_INT >= 33)
+        if (Build.VERSION.SDK_INT >= 33) {
+            // After `Tiramisu Android OS`, it is needed to use a listener to avoid blocking the main
+            // thread waiting for results.
+            val geocodeListener = Geocoder.GeocodeListener { addresses ->
+                addresses.firstOrNull()?.toAddressString()?.let { address ->
+                    //binding.addressTextField?.editText?.setText(address)
+                }
+
+            }
             geocoder.getFromLocation(latitude, longitude, 1, geocodeListener)
+        }
         else
             geocoder.getFromLocation(latitude, longitude, 1)?.let {  addresses ->
                 addresses.firstOrNull()?.toAddressString()?.let { address ->
                     //binding.addressTextField?.editText?.setText(address)
+                    updateFunc(latitude, longitude, address)
                 }
             }
     }
@@ -183,34 +131,73 @@ class GeolocationService : Service() {
                     this, Manifest.permission.ACCESS_COARSE_LOCATION
                 ) != PermissionChecker.PERMISSION_GRANTED
 
+    /**
+     * Start the location-aware instance and defines the callback to be called when the GPS sensor
+     * provides a new user's location.
+     */
+    private fun startLocationAware() {
+
+        // Show a dialog to ask the user to allow the application to access the device's location.
+        // Start receiving location updates.
+        mFusedLocationClient = LocationServices
+            .getFusedLocationProviderClient(this)
+
+        // Initialize the `LocationCallback`.
+        mLocationCallback = object : LocationCallback() {
+
+            /**
+             * This method will be executed when `FusedLocationProviderClient` has a new location.
+             *
+             * @param locationResult The last known location.
+             */
+            override fun onLocationResult(locationResult: LocationResult) {
+                super.onLocationResult(locationResult)
+
+                // Updates the user interface components with GPS data location.
+                locationResult.lastLocation?.let { location ->
+                    setAddress(location.latitude, location.longitude)
+                }
+            }
+        }
+    }
+
+
 
     /**
      * Subscribes this application to get the location changes via the `locationCallback()`.
      */
-    private fun subscribeToLocationUpdates() {
-
+    public fun subscribeToLocationUpdates(initFunc: (Location) -> Unit, updateFunc: (Double, Double, String) -> Unit) {
         // Check if the user allows the application to access the location-aware resources.
         if (checkPermission())
             return
+
+        this.updateFunc = updateFunc
 
         // Sets the accuracy and desired interval for active location updates.
         val locationRequest = LocationRequest
             .Builder(Priority.PRIORITY_HIGH_ACCURACY, 5)
             .build()
 
+        val locationResult = mFusedLocationClient.lastLocation
+        locationResult.addOnCompleteListener {task ->
+            if(task.isSuccessful) {
+                val lastLocationFound = task.result
+                initFunc(lastLocationFound)
+            }
+        }
         // Subscribe to location changes.
-        fusedLocationProviderClient.requestLocationUpdates(
+        mFusedLocationClient.requestLocationUpdates(
             locationRequest, mLocationCallback, Looper.getMainLooper()
         )
     }
 
+
     /**
      * Unsubscribes this application of getting the location changes from  the `locationCallback()`.
      */
-    private fun unsubscribeToLocationUpdates() {
+    public fun unsubscribeToLocationUpdates() {
         // Unsubscribe to location changes.
-        fusedLocationProviderClient
-            .removeLocationUpdates(mLocationCallback)
+        mFusedLocationClient.removeLocationUpdates(mLocationCallback)
     }
 
 }

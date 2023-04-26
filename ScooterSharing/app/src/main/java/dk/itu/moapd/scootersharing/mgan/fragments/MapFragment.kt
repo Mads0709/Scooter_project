@@ -1,32 +1,37 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.Manifest
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
+import android.content.*
+import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
 import java.text.SimpleDateFormat
 import java.util.*
-
 
 /**
  * A simple [Fragment] subclass.
@@ -35,57 +40,56 @@ import java.util.*
  */
 class MapFragment : Fragment() {
     private val callback = OnMapReadyCallback {googleMap ->
-        val amager = LatLng(55.6590778, 12.5908447)
-        googleMap.addMarker(MarkerOptions().position(amager).title("Marker at ITU"))
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(amager, 18f))
+        map = googleMap
     }
+
+    private var map : GoogleMap? = null
+    private var usermarker : Marker? = null
+
+    private val TAG = MapFragment::class.java.simpleName
 
     companion object {
         private const val ALL_PERMISSIONS_RESULT = 1011
     }
 
-    // The BroadcastReceiver used to listen from broadcasts from the service.
-    private var myReceiver: MyReceiver? = null
-
 
     private var _binding: FragmentMapBinding? = null
     private val binding
         get() = checkNotNull(_binding)
-    /**
-     * The primary instance for receiving location updates.
-     */
-    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
-    /**
-     * This callback is called when `FusedLocationProviderClient` has a new `Location`.
-     */
-    private lateinit var locationCallback: LocationCallback
 
-    private lateinit var receiver : BroadcastReceiver
+    // A reference to the service used to get location updates.
+    private var mService: GeolocationService? = null
 
-    override fun onResume() {
-        super.onResume()
-        Intent(context, GeolocationService::class.java).also{ intent ->
-            context?.startService(intent)
+    // Tracks the bound state of the service.
+    private var mBound = false
+
+    // Monitors the state of the connection to the service.
+    private val mServiceConnection: ServiceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            val binder: GeolocationService.LocalBinder = service as GeolocationService.LocalBinder
+            mService = binder.getService()
+            mBound = true
+            subscribeToService()
+            Log.i(TAG, "Service works")
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            mService?.unsubscribeToLocationUpdates()
+            mService = null
+            mBound = false
+            Log.i(TAG, "Service does not work")
         }
     }
-
-    override fun onPause() {
-        super.onPause()
-        Intent(context, GeolocationService::class.java).also{ intent ->
-            context?.stopService(intent)
-        }
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        myReceiver = MyReceiver()
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        requestUserPermissions()
+
+        Intent(context, GeolocationService::class.java).also { intent ->
+            requireActivity().bindService(intent, mServiceConnection, Context.BIND_AUTO_CREATE)
+        }
         _binding = FragmentMapBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -94,55 +98,6 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-        startLocationAware()
-    }
-
-
-
-    private fun startLocationAware() {
-
-        // Show a dialog to ask the user to allow the application to access the device's location.
-        requestUserPermissions()
-        // Start receiving location updates.
-        fusedLocationProviderClient = LocationServices
-            .getFusedLocationProviderClient(requireActivity())
-
-        // Initialize the `LocationCallback`.
-        locationCallback = object : LocationCallback() {
-
-            /**
-             * This method will be executed when `FusedLocationProviderClient` has a new location.
-             *
-             * @param locationResult The last known location.
-             */
-
-            override fun onLocationResult(locationResult: LocationResult) {
-                super.onLocationResult(locationResult)
-
-                // Updates the user interface components with GPS data location.
-                locationResult.lastLocation?.let { location ->
-                    updateUI(location)
-                }
-            }
-        }
-    }
-
-    private fun requestUserPermissions() {
-
-        // An array with location-aware permissions.
-        val permissions: ArrayList<String> = ArrayList()
-        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
-
-        // Check which permissions is needed to ask to the user.
-        val permissionsToRequest = permissionsToRequest(permissions)
-
-        // Show the permissions dialogs to the user.
-        if (permissionsToRequest.size > 0)
-            requestPermissions(
-                permissionsToRequest.toTypedArray(),
-                ALL_PERMISSIONS_RESULT
-            )
     }
 
     /**
@@ -163,81 +118,60 @@ class MapFragment : Fragment() {
         return result
     }
 
-    private fun updateUI(location: Location) {
+    private fun updateUI(lat : Double, long: Double, address: String)  {
         binding.apply {
-            latitudeTextField?.editText?.setText(location.latitude.toString())
-            longitudeTextField?.editText?.setText(location.longitude.toString())
-            timeTextField?.editText?.setText(location.time.toDateString())
+            latitudeTextField?.editText?.setText(lat.toString())
+            longitudeTextField?.editText?.setText(long.toString())
+            addressTextField?.editText?.setText(address)
         }
-        setAddress(location.latitude, location.longitude)
-    }
-
-    private fun Long.toDateString() : String {
-        val date = Date(this)
-        val format = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
-        return format.format(date)
-    }
-
-    private fun setAddress(latitude: Double, longitude: Double) {
-        if (!Geocoder.isPresent())
-            return
-
-        // Create the `Geocoder` instance.
-        val geocoder = Geocoder(requireContext(), Locale.getDefault())
-
-        // After `Tiramisu Android OS`, it is needed to use a listener to avoid blocking the main
-        // thread waiting for results.
-        val geocodeListener = Geocoder.GeocodeListener { addresses ->
-            addresses.firstOrNull()?.toAddressString()?.let { address ->
-                binding.addressTextField?.editText?.setText(address)
-            }
-        }
-
-        // Return an array of Addresses that attempt to describe the area immediately surrounding
-        // the given latitude and longitude.
-        if (Build.VERSION.SDK_INT >= 33)
-            geocoder.getFromLocation(latitude, longitude, 1, geocodeListener)
-        else
-            geocoder.getFromLocation(latitude, longitude, 1)?.let {  addresses ->
-                addresses.firstOrNull()?.toAddressString()?.let { address ->
-                    binding.addressTextField?.editText?.setText(address)
-                }
-            }
     }
 
     /**
-     * Converts the `Address` instance into a `String` representation.
-     *
-     * @return A `String` with the current address.
+     * Create a set of dialogs to show to the users and ask them for permissions to get the device's
+     * resources.
      */
-    private fun Address.toAddressString() : String {
-        val address = this
+    private fun requestUserPermissions() {
 
-        // Create a `String` with multiple lines.
-        val stringBuilder = StringBuilder()
-        stringBuilder.apply {
-            append(address.getAddressLine(0)).append("\n")
-            append(address.postalCode).append(" ")
-            append(address.locality).append("\n")
-            append(address.countryName)
+        // An array with location-aware permissions.
+        val permissions: ArrayList<String> = ArrayList()
+        permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
+
+        // Check which permissions is needed to ask to the user.
+        val permissionsToRequest = permissionsToRequest(permissions)
+
+        // Show the permissions dialogs to the user.
+        if (permissionsToRequest.size > 0){
+            val requestPermissionLauncher = registerForActivityResult(
+                ActivityResultContracts.RequestMultiplePermissions()
+            )
+            {
+                usersPermissions ->
+                val allGranted = usersPermissions.all { it.value }
+                if (allGranted)
+                    subscribeToService()
+            }
+            requestPermissionLauncher.launch(permissionsToRequest.toTypedArray())
         }
 
-        return stringBuilder.toString()
     }
 
-    /**
-     * Receiver for broadcasts sent by [LocationUpdatesService].
-     */
-    private class MyReceiver : BroadcastReceiver() {
+    private fun subscribeToService(){
+        mService?.subscribeToLocationUpdates(
+            {
+                lastLocation ->
+                    map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 18f))
+                    usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position"))
 
-        private var mlocation : Location? = null
-        override fun onReceive(context: Context?, intent: Intent) {
-            val location =
-                intent.getParcelableExtra<Location>(GeolocationService.EXTRA_LOCATION)
-            if (location != null) {
-                mlocation = location
+            },
+            {
+                lat, long, address ->
+                    usermarker?.position = LatLng(lat, long)
+                    updateUI(lat, long , address)
             }
-        }
+
+
+        )
     }
 
 }
