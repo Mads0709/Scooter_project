@@ -18,7 +18,7 @@
         <service
             android:name=".services.GeolocationService"
             android:enabled="true"
-            android:exported="true">
+            android:exported="false">
 
         </service>
 

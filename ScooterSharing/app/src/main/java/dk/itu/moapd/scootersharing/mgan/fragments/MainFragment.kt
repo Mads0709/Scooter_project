@@ -60,7 +60,6 @@ class MainFragment : Fragment(), ItemClickListener {
      * A set of static attributes used in this fragment class.
      */
     companion object{
-        lateinit var ridesDB : RidesDB
         private lateinit var adapter: CustomArrayAdapter
     }
 
@@ -107,10 +106,12 @@ class MainFragment : Fragment(), ItemClickListener {
 
         // Initialize Firebase Auth.
         auth = FirebaseAuth.getInstance()
+
+        if (auth.currentUser == null)
+            startLoginActivity()
         // intialize firebase realtime
         database = Firebase.database("https://moapd-2023-e061c-default-rtdb.europe-west1.firebasedatabase.app/").reference
         storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
-
 
         auth.currentUser?.let {
             val query = database.child("scooters")
@@ -165,8 +166,6 @@ class MainFragment : Fragment(), ItemClickListener {
 
     override fun onStart() {
         super.onStart()
-        if (auth.currentUser == null)
-            startLoginActivity()
     }
 
 

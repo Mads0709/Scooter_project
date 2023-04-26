@@ -44,5 +44,6 @@
     <string name="time_text">Time</string>
     <string name="address_text">Address</string>
     <string name="content_description_location">Location</string>
+    <string name="location_updated">Location Updated: %1$s</string>
 
 </resources>

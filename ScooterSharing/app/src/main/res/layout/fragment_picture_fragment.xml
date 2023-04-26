@@ -14,8 +14,6 @@
             android:cropToPadding="true"
             android:background="@color/black"/>
 
-
-
     <!-- Scooter location-->
 
     <com.google.android.material.textfield.TextInputLayout

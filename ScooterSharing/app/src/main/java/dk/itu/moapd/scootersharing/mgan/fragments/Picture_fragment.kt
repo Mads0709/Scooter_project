@@ -11,6 +11,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import java.io.File
@@ -31,7 +32,6 @@ class Picture_fragment : Fragment() {
     private lateinit var viewModel :ViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
     }
 
