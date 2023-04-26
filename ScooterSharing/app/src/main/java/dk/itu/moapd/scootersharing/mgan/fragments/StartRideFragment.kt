@@ -178,6 +178,7 @@ class StartRideFragment : Fragment() {
         Snackbar.make(binding.root, ridesDB.getCurrentScooterInfo(), Snackbar.LENGTH_SHORT).show();
     }
 
+
     private fun launchCustomAlertDialog() {
         // Get the edit text component.
         val editTextName = customAlertDialogView.findViewById<TextInputEditText>(R.id.edit_text_name)
@@ -195,7 +196,7 @@ class StartRideFragment : Fragment() {
 
                 if (name.isNotEmpty()) {
                     val timestamp = System.currentTimeMillis().toString()
-                    val scooter = Scooter(false, "location", name, timestamp)
+                    val scooter = Scooter(false, "location", name, timestamp, )
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
                     auth.currentUser?.let { user ->

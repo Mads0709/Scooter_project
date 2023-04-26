@@ -1,8 +1,12 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
+import android.app.Activity.RESULT_OK
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +15,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.lifecycle.ViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
@@ -19,6 +30,9 @@ import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 import java.io.File
 import java.util.*
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentPictureFragmentBinding
+import java.io.ByteArrayInputStream
+import java.io.ByteArrayOutputStream
+import java.io.FileInputStream
 import kotlin.math.roundToInt
 
 /**
@@ -31,11 +45,12 @@ class Picture_fragment : Fragment(), ItemClickListener {
     private val binding
         get() = checkNotNull(_binding)
 
+    private lateinit var auth: FirebaseAuth
+    private lateinit var database: DatabaseReference
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
 
 
     }
@@ -46,6 +61,10 @@ class Picture_fragment : Fragment(), ItemClickListener {
     ): View? {
         // Inflate the layout for this fragment
         _binding = FragmentPictureFragmentBinding.inflate(inflater, container, false)
+        // Showing the last taken image.
+
+        scooter?.last_photo = photoName
+
         return binding.root
     }
 
@@ -53,26 +72,32 @@ class Picture_fragment : Fragment(), ItemClickListener {
         ActivityResultContracts.TakePicture()
     ) { didTakePhoto ->
         updatePhoto(photoName)
+        uploadPhotoToFirebaseStorage(photoName)
+
 
     }
     private var photoName: String? = null
 
+    private var scooter: Scooter? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-                photoName = "IMG_${Date()}.JPG"
-                val photoFile = File(requireContext().applicationContext.filesDir,
-                    photoName)
-                val photoUri = FileProvider.getUriForFile(
-                    requireContext(),
-                    "dk.itu.moapd.scootersharing.mgan.fragments.Picture_fragment",
-                    photoFile
-                )
-                takePhoto.launch(photoUri)
-                updatePhoto(photoName)
+        photoName = "IMG_${Date()}.JPG"
+        val photoFile = File(
+            requireContext().applicationContext.filesDir,
+            photoName
+        )
+        val photoUri = FileProvider.getUriForFile(
+            requireContext(),
+            "dk.itu.moapd.scootersharing.mgan.fragments.Picture_fragment",
+            photoFile
+        )
+        takePhoto.launch(photoUri)
+        updatePhoto(photoName)
+        uploadPhotoToFirebaseStorage(scooter?.last_photo)
 
-            }
+    }
 
     private fun updatePhoto(photoFileName: String?) {
         if (binding.scooterPhoto.tag != photoFileName) {
@@ -88,6 +113,7 @@ class Picture_fragment : Fragment(), ItemClickListener {
                     )
                     binding.scooterPhoto.setImageBitmap(scaledBitmap)
                     binding.scooterPhoto.tag = photoFileName
+                    uploadPhotoToFirebaseStorage(photoFileName)
 
                 }
             } else {
@@ -120,6 +146,38 @@ class Picture_fragment : Fragment(), ItemClickListener {
 
     override fun onItemClickListener(dummy: Scooter, position: Int) {
         TODO("Not yet implemented")
+    }
+
+    private fun uploadPhotoToFirebaseStorage(photoFileName: String?) {
+        // Get a reference to the Firebase Storage
+        val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
+        // Create a reference to the photo file in the app's private storage
+        val photoFile = photoFileName?.let {
+            File(requireContext().applicationContext.filesDir, it)
+        }
+        // Check if the photo file exists
+        if (photoFile?.exists() == true) {
+            // Create a reference to the Firebase Storage bucket where you want to store the photo
+            val storageRef = storage.reference.child("scooters")
+            // Create an InputStream from the photo file
+            val stream = FileInputStream(photoFile)
+            // Upload the photo to Firebase Storage
+            val uploadTask = storageRef.putStream(stream)
+            // Add an OnCompleteListener to the uploadTask to handle the result
+            uploadTask.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // The photo was successfully uploaded to Firebase Storage
+                    // Get the download URL for the photo and store it in the scooter object
+                    storageRef.downloadUrl.addOnSuccessListener { uri ->
+                        scooter?.last_photo = uri.toString()
+                    }
+                } else {
+                    // There was an error uploading the photo to Firebase Storage
+                    // Log the error message
+                    task.exception?.message?.let { Log.e("Picture_fragment", it) }
+                }
+            }
+        }
     }
 
 }

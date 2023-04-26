@@ -21,6 +21,7 @@
 
 package dk.itu.moapd.scootersharing.mgan.activites.mgan
 
+import android.net.Uri
 import java.text.SimpleDateFormat
 import java.util.Date
 
@@ -36,7 +37,7 @@ data class Scooter (
     var location: String? = null,
     var name : String? = null,
     var timestamp: String? = null,
-    var  last_photo: String? = null
+    var last_photo: String? = null
     )
 
     /**

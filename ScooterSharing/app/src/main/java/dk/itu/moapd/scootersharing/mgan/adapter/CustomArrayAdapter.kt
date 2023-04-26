@@ -1,6 +1,7 @@
 package dk.itu.moapd.scootersharing.mgan.adapter
 
 import android.media.Image
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -48,7 +49,10 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
             val imageRef = storage.reference.child("scooters").child("scooter.jpg")
 
 
+
+
             // Download and set an image into the ImageView.
+
             imageRef.downloadUrl.addOnSuccessListener {
                 Glide.with(itemView.context)
                     .load(it)
@@ -56,9 +60,13 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
                     .centerCrop()
                     .into(binding.listItemImageId)
             }
+
+
         }
 
     }
+
+
 
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
