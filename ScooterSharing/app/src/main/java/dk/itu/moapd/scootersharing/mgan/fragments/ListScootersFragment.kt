@@ -11,20 +11,17 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import dk.itu.moapd.scootersharing.mgan.R
-import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentListScootersBinding
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
 
 /**
  * A simple [Fragment] subclass.
- * Use the [FragmentListScooters.newInstance] factory method to
+ * Use the [ListScootersFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class FragmentListScooters : Fragment(), ItemClickListener {
+class ListScootersFragment : Fragment(), ItemClickListener {
 
     companion object{
         private lateinit var adapter: CustomArrayAdapter

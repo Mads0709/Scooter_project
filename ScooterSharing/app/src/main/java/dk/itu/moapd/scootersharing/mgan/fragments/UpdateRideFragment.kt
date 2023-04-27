@@ -186,7 +186,7 @@ class UpdateRideFragment : Fragment() {
                     //set the name and location of the given values
                     //ridesDB.addScooter(name, location)
 
-                    ridesDB.updateCurrentScooter(location)
+                    //ridesDB.updateCurrentScooter(location)
                     //reset textfield after adding scotter
                     nameTextFieldEdit.setText("")
                     locationTextFieldEdit.setText("")

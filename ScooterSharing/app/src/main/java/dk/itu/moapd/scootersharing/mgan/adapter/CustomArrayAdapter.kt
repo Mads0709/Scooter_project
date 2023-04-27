@@ -40,7 +40,6 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
 
         fun bind(scooter : Scooter){
            binding.listItemName.text = scooter.name
-           binding.listItemLocation.text = scooter.location
            binding.listItemTimestamp.text = scooter.timestamp.toString()
 
 

@@ -50,7 +50,7 @@
     </fragment>
     <fragment
         android:id="@+id/fragmentListScooters"
-        android:name="dk.itu.moapd.scootersharing.mgan.fragments.FragmentListScooters"
+        android:name="dk.itu.moapd.scootersharing.mgan.fragments.ListScootersFragment"
         android:label="ListScootersFragment"
     />
     <fragment

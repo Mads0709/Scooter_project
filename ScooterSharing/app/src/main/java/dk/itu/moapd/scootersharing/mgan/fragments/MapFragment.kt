@@ -24,9 +24,12 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
@@ -39,12 +42,39 @@ import java.util.*
  * create an instance of this fragment.
  */
 class MapFragment : Fragment() {
-    private val callback = OnMapReadyCallback {googleMap ->
-        map = googleMap
-    }
 
+    private var database: DatabaseReference = FirebaseDatabase.getInstance().reference
     private var map : GoogleMap? = null
     private var usermarker : Marker? = null
+
+    private val callback = OnMapReadyCallback {googleMap ->
+        map = googleMap
+        // Get a reference to the "scooters" node in the database
+        val scootersRef = database.child("scooters")
+
+        // Attach a listener to the "scooters" node to retrieve the data
+        scootersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Iterate over the child nodes of the "scooters" node to retrieve the latitude and longitude data
+                for (scooterSnapshot in snapshot.children) {
+                    val latitude = scooterSnapshot.child("latitude").value as Double
+                    val longitude = scooterSnapshot.child("longitude").value as Double
+                    val name = scooterSnapshot.child("name").value as String
+                    val isused = scooterSnapshot.child("isUsed").value as Boolean
+
+                    // Create a LatLng object and add a marker to the map
+                    val location = LatLng(latitude, longitude)
+
+                    if (!isused)
+                    map?.addMarker(MarkerOptions().position(location).title(name))
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error here
+                Log.d(TAG, "Could not get data from Firebase realtime")
+            }
+        })
+    }
 
     private val TAG = MapFragment::class.java.simpleName
 
@@ -160,9 +190,17 @@ class MapFragment : Fragment() {
         mService?.subscribeToLocationUpdates(
             {
                 lastLocation ->
+<<<<<<< HEAD
                     map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 18f))
                     usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position"))
                     updateUI(lastLocation.latitude, lastLocation.longitude, "")
+=======
+                     // Change the color of the default marker to blue
+                    val blueMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
+                    map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude,), 18f))
+                    usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position").icon(blueMarker))
+                    updateUI(lastLocation.latitude, lastLocation.longitude , "")
+>>>>>>> c5ef805480530f4c09ff55e4d3b3863666551c65
             },
             {
                 lat, long, address ->

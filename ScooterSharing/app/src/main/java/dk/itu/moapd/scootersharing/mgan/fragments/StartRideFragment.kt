@@ -27,6 +27,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+<<<<<<< HEAD
+=======
+import com.firebase.ui.auth.data.model.User
+import com.google.android.gms.maps.model.LatLng
+>>>>>>> c5ef805480530f4c09ff55e4d3b3863666551c65
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -38,6 +43,7 @@ import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentStartRideBinding
+import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
 
 
 /**
@@ -52,6 +58,8 @@ class StartRideFragment : Fragment() {
         lateinit var ridesDB : RidesDB
         private lateinit var adapter: CustomArrayAdapter
     }
+
+    private var mService: GeolocationService? = null
 
     /**
      * View binding is a feature that allows you to more easily write code that interacts with
@@ -213,11 +221,13 @@ class StartRideFragment : Fragment() {
 
                 // Create the `Scooter` object using the name typed by the user.
                 val name = editTextName.text.toString()
-                //val location = editTextLocation.text.toString()
-
                 if (name.isNotEmpty()) {
                     val timestamp = System.currentTimeMillis().toString()
+<<<<<<< HEAD
                     val scooter = Scooter(false, "location", name, timestamp)
+=======
+                    val scooter = Scooter(false, 55.6582259,12.5895377, name, timestamp, "" )
+>>>>>>> c5ef805480530f4c09ff55e4d3b3863666551c65
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
                     auth.currentUser?.let { user ->

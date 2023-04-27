@@ -11,6 +11,7 @@
         android:layout_gravity="center"
         android:layout_width="300dp"
         android:layout_height="300dp"
+        android:layout_marginTop="3mm"
         card_view:cardCornerRadius="4dp">
 
         <TextView
@@ -18,11 +19,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/list_item_name"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:id="@+id/list_item_location" />
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
