@@ -29,7 +29,6 @@ class GeolocationService : Service() {
     private lateinit var mLocationCallback: LocationCallback
 
     private var updateFunc: (Double, Double, String) -> Unit = {_: Double, _: Double, _: String -> }
-
     companion object {
         private const val PACKAGENAME = "dk.itu.moapd.scootersharing.mgan.services"
         val EXTRA_LOCATION: String = PACKAGENAME + ".location"
@@ -83,6 +82,7 @@ class GeolocationService : Service() {
             val geocodeListener = Geocoder.GeocodeListener { addresses ->
                 addresses.firstOrNull()?.toAddressString()?.let { address ->
                     //binding.addressTextField?.editText?.setText(address)
+                    updateFunc(latitude, longitude, address)
                 }
 
             }
@@ -182,7 +182,11 @@ class GeolocationService : Service() {
         locationResult.addOnCompleteListener {task ->
             if(task.isSuccessful) {
                 val lastLocationFound = task.result
+                setAddress(lastLocationFound.latitude, lastLocationFound.longitude)
                 initFunc(lastLocationFound)
+
+
+
             }
         }
         // Subscribe to location changes.

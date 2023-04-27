@@ -34,7 +34,8 @@ import java.util.Date
 data class Scooter (
     //var key: String,
     var isUsed: Boolean? = null,
-    var location: String? = null,
+    var latitude: Double? = null,
+    var longitude: Double? = null,
     var name : String? = null,
     var timestamp: String? = null,
     var last_photo: String? = null

@@ -96,6 +96,7 @@ class RidesDB private constructor ( context : Context) {
 
 
      */
+    /*
     /**
      * Update the location for last scooter in the list
      * @param location updated location of the scooter
@@ -103,6 +104,8 @@ class RidesDB private constructor ( context : Context) {
     fun updateCurrentScooter ( location : String ) {
         rides.last().location = location
     }
+
+     */
 
     /**
      * Get the last scooter in the list
