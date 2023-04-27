@@ -116,6 +116,7 @@ class MainFragment : Fragment(), ItemClickListener {
         auth.currentUser?.let {
             val query = database.child("scooters")
                 .orderByChild("createdAt")
+                .equalTo(false, "isUsed")
             val options = FirebaseRecyclerOptions.Builder<Scooter>()
                 .setQuery(query, Scooter::class.java)
                 .setLifecycleOwner(this)
