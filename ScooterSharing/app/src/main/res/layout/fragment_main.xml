@@ -61,6 +61,13 @@
         android:layout_marginTop="20dp"
         android:text="@string/picture_button" />
 
+    <Button
+        android:id="@+id/fragmentQR_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/scan" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

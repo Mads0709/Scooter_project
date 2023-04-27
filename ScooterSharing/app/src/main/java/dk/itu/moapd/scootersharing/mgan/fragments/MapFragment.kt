@@ -162,7 +162,7 @@ class MapFragment : Fragment() {
                 lastLocation ->
                     map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 18f))
                     usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position"))
-
+                    updateUI(lastLocation.latitude, lastLocation.longitude, "")
             },
             {
                 lat, long, address ->

@@ -46,4 +46,10 @@
     <string name="content_description_location">Location</string>
     <string name="location_updated">Location Updated: %1$s</string>
 
+    <string name="scan">Scan</string>
+
+
+    <string name="content_description_firebase">ML Kit for Firebase</string>
+    <string name="content_description_camera">Camera</string>
+
 </resources>

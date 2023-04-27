@@ -25,13 +25,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.firebase.ui.auth.data.model.User
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
@@ -63,6 +64,8 @@ class StartRideFragment : Fragment() {
     private lateinit var binding: FragmentStartRideBinding
        // get() = checkNotNull(_binding)
 
+    private lateinit var btn_scan: Button
+
     private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
@@ -76,6 +79,9 @@ class StartRideFragment : Fragment() {
      * Theme.MaterialComponents).
      */
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
+
+
+
 
     /**
      * Called when the fragment is starting. This is where most initialization should go: calling
@@ -108,7 +114,20 @@ class StartRideFragment : Fragment() {
         customAlertDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.fragment_start_ride, binding.root, false)
         launchCustomAlertDialog()
 
+
     }
+
+
+
+
+
+
+
+
+
+
+
+
 
     /**
      * Called to have the fragment instantiate its user interface view. This is optional, and
@@ -179,6 +198,8 @@ class StartRideFragment : Fragment() {
     }
 
 
+
+
     private fun launchCustomAlertDialog() {
         // Get the edit text component.
         val editTextName = customAlertDialogView.findViewById<TextInputEditText>(R.id.edit_text_name)
@@ -196,7 +217,7 @@ class StartRideFragment : Fragment() {
 
                 if (name.isNotEmpty()) {
                     val timestamp = System.currentTimeMillis().toString()
-                    val scooter = Scooter(false, "location", name, timestamp, )
+                    val scooter = Scooter(false, "location", name, timestamp)
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
                     auth.currentUser?.let { user ->
@@ -221,4 +242,10 @@ class StartRideFragment : Fragment() {
             .show()
     }
 
+
+
+
+
 }
+
+

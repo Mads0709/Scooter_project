@@ -218,6 +218,10 @@ class MainFragment : Fragment(), ItemClickListener {
                     findNavController().navigate(R.id.action_mainFragment_to_fragmentPicture)
                 }
 
+                fragmentQRButton.setOnClickListener{
+                    findNavController().navigate(R.id.action_mainFragment_to_fragmentQR)
+                }
+
                 showListButton.setOnClickListener{
                     //Action
                     findNavController().navigate(R.id.action_mainFragment_to_fragmentListScooters)
