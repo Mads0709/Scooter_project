@@ -66,7 +66,7 @@ class MapFragment : Fragment() {
                     val location = LatLng(latitude, longitude)
 
                     if (!isused)
-                    map?.addMarker(MarkerOptions().position(location).title(name))
+                        map?.addMarker(MarkerOptions().position(location).title(name))
                 }
             }
             override fun onCancelled(error: DatabaseError) {
@@ -190,17 +190,11 @@ class MapFragment : Fragment() {
         mService?.subscribeToLocationUpdates(
             {
                 lastLocation ->
-<<<<<<< HEAD
-                    map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude), 18f))
-                    usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position"))
-                    updateUI(lastLocation.latitude, lastLocation.longitude, "")
-=======
                      // Change the color of the default marker to blue
                     val blueMarker = BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)
                     map?.moveCamera(CameraUpdateFactory.newLatLngZoom(LatLng(lastLocation.latitude, lastLocation.longitude,), 18f))
                     usermarker = map?.addMarker(MarkerOptions().position(LatLng(lastLocation.latitude, lastLocation.longitude)).title("My position").icon(blueMarker))
                     updateUI(lastLocation.latitude, lastLocation.longitude , "")
->>>>>>> c5ef805480530f4c09ff55e4d3b3863666551c65
             },
             {
                 lat, long, address ->
