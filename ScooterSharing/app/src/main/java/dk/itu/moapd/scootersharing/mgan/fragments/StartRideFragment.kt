@@ -220,7 +220,7 @@ class StartRideFragment : Fragment() {
                 if (name.isNotEmpty()) {
                     val timestamp = System.currentTimeMillis().toString()
 
-                    val scooter = Scooter(false, 55.6582259,12.5895377, name, timestamp, "" )
+                    val scooter = Scooter(false, 55.6582259,12.5895377, name, timestamp, "gs://moapd-2023-e061c.appspot.com/scooters" )
 
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
