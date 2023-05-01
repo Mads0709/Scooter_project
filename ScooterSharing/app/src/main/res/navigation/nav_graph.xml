@@ -12,9 +12,6 @@
             android:id="@+id/action_mainFragment_to_startRideFragment"
             app:destination="@id/startRideFragment" />
         <action
-            android:id="@+id/action_mainFragment_to_updateRideFragment"
-            app:destination="@id/updateRideFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_deleteRideFragment"
             app:destination="@id/deleteRideFragment" />
         <action
@@ -67,6 +64,17 @@
         android:id="@+id/fragmentQR"
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.QRFragment"
         android:label="QRFragment"
-        />
+        >
+        <action
+            android:id="@+id/action_fragmentQR_to_fragmentShowScooter"
+            app:destination="@id/fragmentShowScooter" />
+        <action
+            android:id="@+id/action_fragmentQR_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fragmentShowScooter"
+        android:name="dk.itu.moapd.scootersharing.mgan.fragments.ShowScooterFragment"
+        android:label="ShowScooteFragment"/>
 
 </navigation>
