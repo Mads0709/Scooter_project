@@ -27,8 +27,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
-import com.firebase.ui.auth.data.model.User
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputEditText
@@ -220,7 +218,9 @@ class StartRideFragment : Fragment() {
                 val name = editTextName.text.toString()
                 if (name.isNotEmpty()) {
                     val timestamp = System.currentTimeMillis().toString()
+
                     val scooter = Scooter(false, 55.6582259,12.5895377, name, timestamp, "" )
+
                     // In the case of authenticated user, create a new unique key for the object in
                     // the database.
                     auth.currentUser?.let { user ->

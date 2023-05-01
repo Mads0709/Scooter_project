@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_mainFragment_to_fragmentQR"
             app:destination="@id/fragmentQR" />
+        <action
+            android:id="@+id/action_mainFragment_to_fragmentScooterInfo"
+            app:destination="@id/fragmentScooterInfo" />
     </fragment>
 
     <fragment
@@ -68,5 +71,9 @@
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.QRFragment"
         android:label="QRFragment"
         />
+    <fragment
+        android:id="@+id/fragmentScooterInfo"
+        android:name="dk.itu.moapd.scootersharing.mgan.fragments.ScooterInfo"
+        android:label="ScooterInfoFragment"/>
 
 </navigation>

@@ -33,7 +33,7 @@ class QRFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setupPermissions()
-
+        makeRequest()
     }
 
 
@@ -54,6 +54,8 @@ class QRFragment : Fragment() {
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
+
+
     }
 
     override fun onResume() {
