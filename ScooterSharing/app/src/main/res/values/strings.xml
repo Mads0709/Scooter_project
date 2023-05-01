@@ -41,12 +41,20 @@
     <string name="show_map">Show map</string>
     <string name="latitude_text">Latitude</string>
     <string name="longitude_text">Longitude</string>
+
+    <string name="x_value">x-axis</string>
+    <string name="y_value">y-axis</string>
+    <string name="z_value">z-axis</string>
+
+
     <string name="time_text">Time</string>
     <string name="address_text">Address</string>
     <string name="content_description_location">Location</string>
     <string name="location_updated">Location Updated: %1$s</string>
 
     <string name="scan">Scan</string>
+
+    <string name="scooterInfo">Scooter info</string>
 
 
     <string name="content_description_firebase">ML Kit for Firebase</string>

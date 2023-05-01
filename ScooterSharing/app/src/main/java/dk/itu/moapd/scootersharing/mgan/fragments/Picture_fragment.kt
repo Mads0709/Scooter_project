@@ -1,5 +1,6 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -7,7 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
@@ -28,6 +32,8 @@ import kotlin.math.roundToInt
  * Use the [Picture_fragment.newInstance] factory method to
  * create an instance of this fragment.
  */
+
+private const val CAMERA_REQUEST_CODE = 101
 class Picture_fragment : Fragment(), ItemClickListener {
     private var _binding: FragmentPictureFragmentBinding? = null
     private val binding
@@ -40,6 +46,36 @@ class Picture_fragment : Fragment(), ItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        setupPermissions()
+
+    }
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest(){
+        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        when (requestCode) {
+            CAMERA_REQUEST_CODE -> {
+                if (grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(
+                        requireContext(),
+                        "You need to ask for permission",
+                        Toast.LENGTH_SHORT
+                    )
+
+                } else {
+                    //succes
+                }
+            }
+        }
     }
 
     override fun onCreateView(
