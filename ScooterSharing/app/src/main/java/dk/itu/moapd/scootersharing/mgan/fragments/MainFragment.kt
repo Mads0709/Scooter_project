@@ -200,7 +200,7 @@ class MainFragment : Fragment(), ItemClickListener {
                 }
 
                 mainUpdateRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
+                    //findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
                 }
                 mainDeleteRideButton.setOnClickListener{
                     findNavController().navigate(R.id.action_mainFragment_to_deleteRideFragment)

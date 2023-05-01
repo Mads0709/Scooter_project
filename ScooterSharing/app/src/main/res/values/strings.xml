@@ -54,7 +54,14 @@
 
     <string name="scan">Scan</string>
 
+
     <string name="scooterInfo">Scooter info</string>
+
+
+    <string name="start_ride_dialog_title">Start ride</string>
+    <string name="start_ride_dialog_support">Are you sure you want to start ride with</string>
+    <string name="start_ride_confirm">Confirm</string>
+    <string name="start_ride_cancel">Cancel</string>
 
 
     <string name="content_description_firebase">ML Kit for Firebase</string>
