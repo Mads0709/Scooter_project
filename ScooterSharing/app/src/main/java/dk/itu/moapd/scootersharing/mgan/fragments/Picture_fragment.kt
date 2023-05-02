@@ -28,13 +28,7 @@ import java.io.FileInputStream
 import java.util.*
 import kotlin.math.roundToInt
 
-/**
- * A simple [Fragment] subclass.
- * Use the [Picture_fragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
-private const val CAMERA_REQUEST_CODE = 101
 class Picture_fragment : Fragment(), ItemClickListener {
     private var _binding: FragmentPictureFragmentBinding? = null
     private val binding
@@ -47,43 +41,16 @@ class Picture_fragment : Fragment(), ItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
-        setupPermissions()
+
 
 
     }
 
-    private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(
-            requireContext(), android.Manifest.permission.CAMERA
-        )
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest()
-        }
-    }
 
-    private fun makeRequest() {
-        ActivityCompat.requestPermissions(
-            requireActivity(), arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE
-        )
-    }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int, permissions: Array<out String>, grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when (requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // Permission granted, proceed with image capture
-                } else {
-                    // Permission denied, display an error message
-                    Toast.makeText(
-                        requireContext(), "Camera permission is required", Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-        }
-    }
+
+
+
 
 
     override fun onCreateView(
@@ -130,7 +97,7 @@ class Picture_fragment : Fragment(), ItemClickListener {
         takePhoto.launch(photoUri)
         updatePhoto(photoName)
         uploadPhotoToFirebaseStorage(scooter?.last_photo)
-        database.child("scooters").child("0").child("last_photo").setValue(photoName)
+        database.child("scooters").child("CPH1").child("last_photo").setValue(photoName)
 
     }
 
@@ -197,7 +164,7 @@ class Picture_fragment : Fragment(), ItemClickListener {
         // Check if the photo file exists
         if (photoFile?.exists() == true) {
             // Create a reference to the Firebase Storage bucket where you want to store the photo
-            val storageRef = storage.reference.child("scooters")
+            val storageRef = storage.reference.child("scooters/").child("name")
             // Create an InputStream from the photo file
             val stream = FileInputStream(photoFile)
             // Upload the photo to Firebase Storage

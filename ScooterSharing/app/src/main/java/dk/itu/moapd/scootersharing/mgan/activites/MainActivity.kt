@@ -22,15 +22,24 @@
 package dk.itu.moapd.scootersharing.mgan.activites
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+
+import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat
 import androidx.core.view.WindowCompat
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.auth.FirebaseAuth
 import dk.itu.moapd.scootersharing.mgan.databinding.ActivityMainBinding
 
 /**
  * An activity class with methods to manage the main activity of the ScooterSharing application.
  */
+
+private const val CAMERA_REQUEST_CODE = 101
 class MainActivity : AppCompatActivity() {
 
     /**
@@ -39,6 +48,8 @@ class MainActivity : AppCompatActivity() {
      * layout file present in that module. An instance of a binding class contains direct references
      * to all views that have an ID in the corresponding layout.
      */
+
+    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var binding: ActivityMainBinding
 
 
@@ -67,7 +78,35 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
 
+        setupPermissions()
+        materialAlertDialogBuilder = MaterialAlertDialogBuilder(this)
+
         setContentView(binding.root)
+    }
+
+    private fun setupPermissions() {
+        val permission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            makeRequest()
+        }
+    }
+
+    private fun makeRequest(){
+        ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA),
+            dk.itu.moapd.scootersharing.mgan.activites.CAMERA_REQUEST_CODE
+        )
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        when (requestCode) {
+            dk.itu.moapd.scootersharing.mgan.activites.CAMERA_REQUEST_CODE -> {
+                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "You need to ask for permission", Toast.LENGTH_SHORT)
+
+                }
+            }
+        }
     }
 
 

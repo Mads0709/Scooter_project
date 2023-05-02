@@ -71,6 +71,13 @@
             />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/find_nearest_scooter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/find_nearest_scooter_button" />
+
     <include layout="@layout/content_map" />
 
 </LinearLayout>

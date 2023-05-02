@@ -22,7 +22,7 @@ import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 
 
-private const val CAMERA_REQUEST_CODE = 101
+
 class QRFragment : Fragment() {
     private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var codeScanner: CodeScanner
@@ -33,9 +33,7 @@ class QRFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setupPermissions()
 
-        materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
 
     }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -119,26 +117,8 @@ class QRFragment : Fragment() {
         super.onPause()
     }
 
-    private fun setupPermissions() {
-        val permission = ContextCompat.checkSelfPermission(requireContext(), android.Manifest.permission.CAMERA)
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            makeRequest()
-        }
-    }
 
-    private fun makeRequest(){
-        ActivityCompat.requestPermissions(requireActivity(), arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
-    }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        when (requestCode) {
-            CAMERA_REQUEST_CODE -> {
-                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(requireContext(), "You need to ask for permission", Toast.LENGTH_SHORT)
 
-                }
-            }
-        }
-    }
 
 }

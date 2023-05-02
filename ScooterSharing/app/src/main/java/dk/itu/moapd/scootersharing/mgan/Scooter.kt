@@ -39,6 +39,7 @@ data class Scooter (
     var name : String? = null,
     var timestamp: String? = null,
     var last_photo: String? = null
+
     )
 
     /**
