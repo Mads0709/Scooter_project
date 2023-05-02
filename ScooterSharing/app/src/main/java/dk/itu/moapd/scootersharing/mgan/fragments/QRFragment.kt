@@ -1,9 +1,6 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
-import android.app.Activity
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -21,16 +18,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.firebase.database.*
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
-import com.journeyapps.barcodescanner.CompoundBarcodeView
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 
-
-/**
- * A simple [Fragment] subclass.
- * Use the [QRFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 
 private const val CAMERA_REQUEST_CODE = 101
 class QRFragment : Fragment() {
@@ -40,7 +30,6 @@ class QRFragment : Fragment() {
 
     private lateinit var database: DatabaseReference
 
-    private var isScanning: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,8 +38,6 @@ class QRFragment : Fragment() {
         materialAlertDialogBuilder = MaterialAlertDialogBuilder(requireContext())
 
     }
-
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         database =
@@ -71,33 +58,45 @@ class QRFragment : Fragment() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
                                 val scooter = snapshot.children.first().getValue(Scooter::class.java)
-                                if (scooter != null) {
-                                    Log.d(TAG, "Retrieved scooter data: $scooter")
-                                    scooter.isUsed = true
-                                    scooterRef.setValue(scooter)
-                                    Log.d(TAG,  "Scooter is now used: $scooter")
+                                if(!scooter?.isUsed!!){
+                                    if (scooter != null) {
+                                        Log.d(TAG, "Retrieved scooter data: $scooter")
+                                        scooterRef.setValue(scooter)
+                                        Log.d(TAG,  "Scooter is now used: $scooter")
+                                        MaterialAlertDialogBuilder(requireActivity())
+                                            .setTitle(getString(R.string.start_ride_dialog_title))
+                                            .setMessage(getString(R.string.start_ride_dialog_support) + " " + scooterName)
+                                            .setNeutralButton(getString(R.string.start_ride_cancel)) { dialog, which ->
+                                                findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
+                                                scooter.isUsed = false
+                                                scooterRef.setValue(scooter)
+                                            }
+                                            .setPositiveButton(getString(R.string.start_ride_confirm)) { dialog, which ->
+                                                findNavController().navigate(R.id.action_fragmentQR_to_fragmentShowScooter)
+                                                scooter.isUsed = true
+                                                scooterRef.setValue(scooter)
+                                            }
+                                            .show()
+                                    }
+
+                                }
+                                else {
+                                    Log.d(TAG, "Scooter is used")
                                     MaterialAlertDialogBuilder(requireActivity())
-                                        .setTitle(getString(R.string.start_ride_dialog_title))
-                                        .setMessage(getString(R.string.start_ride_dialog_support) + " " + scooterName)
-                                        .setNeutralButton(getString(R.string.start_ride_cancel)) { dialog, which ->
+                                        .setTitle(getString(R.string.scooter_is_used_title))
+                                        .setNeutralButton(getString(R.string.scooter_is_used_ok)) { dialog, which ->
                                             findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
-                                            scooter.isUsed = false
-                                            scooterRef.setValue(scooter)
-                                        }
-                                        .setPositiveButton(getString(R.string.start_ride_confirm)) { dialog, which ->
-                                            findNavController().navigate(R.id.action_fragmentQR_to_fragmentShowScooter)
                                         }
                                         .show()
                                 }
+
                             } else {
                                 Log.d(TAG, "Scooter not found in database")
                             }
-                            isScanning = false
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             Log.d(TAG, "Database query cancelled")
-                            isScanning = false
                         }
                     })
 
@@ -137,38 +136,9 @@ class QRFragment : Fragment() {
                 if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(requireContext(), "You need to ask for permission", Toast.LENGTH_SHORT)
 
-                } else{
-                    //succes
                 }
             }
         }
-    }
-
-    private fun getScooterData(scooterId: String) {
-        val scootersRef = database.child("scooters")
-        val scooterQuery = scootersRef.orderByChild("id").equalTo(scooterId)
-
-        scooterQuery.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                for (scooterSnapshot in dataSnapshot.children) {
-                    val scooter = scooterSnapshot.getValue(Scooter::class.java)
-                    if (scooter != null) {
-                        // Update the isUsed field to true
-                        scooterSnapshot.ref.child("isUsed").setValue(true)
-                        // Launch the ShowScooterFragment and pass the scooter data as an extra
-                        val intent = Intent(requireContext(), ShowScooterFragment::class.java)
-                        startActivity(intent)
-                        return
-                    }
-                }
-                // If no scooter was found, show an error message
-                Toast.makeText(requireContext(), "Scooter not found", Toast.LENGTH_SHORT).show()
-            }
-
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle database error
-            }
-        })
     }
 
 }
