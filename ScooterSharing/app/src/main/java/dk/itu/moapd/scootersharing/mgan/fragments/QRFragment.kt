@@ -70,7 +70,7 @@ class QRFragment : Fragment() {
                                                 scooterRef.setValue(scooter)
                                             }
                                             .setPositiveButton(getString(R.string.start_ride_confirm)) { dialog, which ->
-                                                findNavController().navigate(R.id.action_fragmentQR_to_fragmentShowScooter)
+                                                findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
                                                 scooter.isUsed = true
                                                 scooterRef.setValue(scooter)
                                             }
@@ -86,6 +86,9 @@ class QRFragment : Fragment() {
                                             findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
                                         }
                                         .show()
+                                    //Remove after!!!!!!!
+                                    scooter.isUsed = false
+                                    scooterRef.setValue(scooter)
                                 }
 
                             } else {
@@ -103,8 +106,6 @@ class QRFragment : Fragment() {
         scannerView.setOnClickListener {
             codeScanner.startPreview()
         }
-
-
     }
 
     override fun onResume() {

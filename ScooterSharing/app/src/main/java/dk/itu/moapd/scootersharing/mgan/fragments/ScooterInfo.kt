@@ -16,6 +16,7 @@ import androidx.wear.tiles.material.CircularProgressIndicator
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentScooterInfoBinding
+import java.lang.Math.abs
 import java.lang.System.out
 
 class ScooterInfo : Fragment(), SensorEventListener {
@@ -67,9 +68,9 @@ class ScooterInfo : Fragment(), SensorEventListener {
         }
 
         binding.apply {
-            xValueInput?.editText?.setText(se.values[0].toString())
-            yValueInput?.editText?.setText(se.values[1].toString())
-            zValueInput?.editText?.setText(se.values[2].toString())
+            xValueInput?.editText?.setText((abs(se.values[0]*3.6)).toString())
+            yValueInput?.editText?.setText((abs(se.values[1]*3.6)).toString())
+            zValueInput?.editText?.setText((abs(se.values[2]*3.6)).toString())
 
             //Log.d(TAG, "Sensor X: " + se.values[0] + "Y" + se.values[1] + "Z" + se.values[2])
         }

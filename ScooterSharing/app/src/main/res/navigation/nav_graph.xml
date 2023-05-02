@@ -75,16 +75,9 @@
         android:label="ScooterInfoFragment"/>
 
         <action
-            android:id="@+id/action_fragmentQR_to_fragmentShowScooter"
-            app:destination="@id/fragmentShowScooter" />
-        <action
             android:id="@+id/action_fragmentQR_to_mainFragment"
             app:destination="@id/mainFragment" />
 
-    <fragment
-        android:id="@+id/fragmentShowScooter"
-        android:name="dk.itu.moapd.scootersharing.mgan.fragments.ShowScooterFragment"
-        android:label="ShowScooteFragment"/>
 
 
 </navigation>

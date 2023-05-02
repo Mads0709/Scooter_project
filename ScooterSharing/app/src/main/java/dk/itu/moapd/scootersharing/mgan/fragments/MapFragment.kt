@@ -19,6 +19,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
+import com.firebase.geofire.GeoFireUtils
+import com.firebase.geofire.GeoLocation
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,13 +30,17 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
+import com.google.firebase.firestore.QuerySnapshot
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
 import java.text.SimpleDateFormat
 import java.util.*
+import com.google.maps.android.SphericalUtil;
+
 
 /**
  * A simple [Fragment] subclass.
@@ -46,6 +52,7 @@ class MapFragment : Fragment() {
     private var database: DatabaseReference = FirebaseDatabase.getInstance().reference
     private var map : GoogleMap? = null
     private var usermarker : Marker? = null
+
 
     private val callback = OnMapReadyCallback {googleMap ->
         map = googleMap
@@ -77,10 +84,6 @@ class MapFragment : Fragment() {
     }
 
     private val TAG = MapFragment::class.java.simpleName
-
-    companion object {
-        private const val ALL_PERMISSIONS_RESULT = 1011
-    }
 
 
     private var _binding: FragmentMapBinding? = null
@@ -128,12 +131,15 @@ class MapFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map_fragment) as SupportMapFragment?
         mapFragment?.getMapAsync(callback)
-
         with(binding){
             findNearestScooterButton.setOnClickListener{
+                getClosetsScooter()
 
             }
         }
+
+
+
     }
 
     /**
@@ -212,16 +218,63 @@ class MapFragment : Fragment() {
         )
     }
 
-    /*private fun findNearestScooter() {
+
+    private var location : LatLng = LatLng(0.0,0.0)
+    private var mindistance : Double = Double.MAX_VALUE
+    private var scooterName : String = ""
+    private var distanceText : String = ""
+    fun getClosetsScooter(){
+
         mService?.subscribeToLocationUpdates(
             {lastLocation ->
                 var currentPosLat = lastLocation.latitude
-                var
+                var currentPosLong = lastLocation.longitude
 
+                location = LatLng(currentPosLat, currentPosLong)
+            },
+            {
+                lat, long, address ->
+                usermarker?.position = LatLng(lat, long)
 
             }
 
-     */
+        )
+
+        val scootersRef = database.child("scooters")
+
+        // Attach a listener to the "scooters" node to retrieve the data
+        scootersRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                // Iterate over the child nodes of the "scooters" node to retrieve the latitude and longitude data
+                for (scooterSnapshot in snapshot.children) {
+                    val latitude = scooterSnapshot.child("latitude").value as Double
+                    val longitude = scooterSnapshot.child("longitude").value as Double
+                    val name = scooterSnapshot.child("name").value as String
+                    val isused = scooterSnapshot.child("used").value as Boolean
+
+                    var scooterLocation : LatLng = LatLng(latitude,longitude)
+                    var distance = SphericalUtil.computeDistanceBetween(location, scooterLocation);
+                    var tempDisText: String = String.format("%.2f meters", distance)
+
+
+                    if (distance < mindistance && !isused) {
+                        mindistance = distance
+                        scooterName = name
+                        distanceText = tempDisText
+                    }
+
+
+                }
+                Toast.makeText(requireContext(), "Nearest scooter is " + scooterName + "\n" + distanceText, Toast.LENGTH_LONG).show()
+            }
+
+
+            override fun onCancelled(error: DatabaseError) {
+                // Handle the error here
+                Log.d(TAG, "Could not get data from Firebase realtime")
+            }
+        })
     }
+}
 
 
