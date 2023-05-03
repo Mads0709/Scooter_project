@@ -30,7 +30,6 @@ class Picture_fragment : Fragment(), ItemClickListener {
     private val binding
         get() = checkNotNull(_binding)
 
-    private lateinit var auth: FirebaseAuth
     private lateinit var database: DatabaseReference
 
 
