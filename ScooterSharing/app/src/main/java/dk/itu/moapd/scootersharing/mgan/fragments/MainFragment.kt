@@ -163,10 +163,6 @@ class MainFragment : Fragment(), ItemClickListener {
         return binding.root
     }
 
-    override fun onStart() {
-        super.onStart()
-    }
-
 
     /**
      * Called when the view previously created by `onCreateView()` has been detached from the
@@ -228,46 +224,9 @@ class MainFragment : Fragment(), ItemClickListener {
         startActivity(intent)
         activity?.finish()
     }
-
-
-
     override fun onItemClickListener(scooter: Scooter, position: Int) {
-        /*
-        // Inflate Custom alert dialog view
-        customAlertDialogView = LayoutInflater.from(requireContext())
-            .inflate(R.layout.fragment_update_ride, binding.root, false)
 
-        // Launching the custom alert dialog
-        launchUpdateAlertDialog(scooter, position)
-
-
-         */
     }
 
-   /* private fun launchUpdateAlertDialog(scooter: Scooter, position: Int) {
-        // Get the edit text component.
-        val editTextName = customAlertDialogView
-            .findViewById<TextInputEditText>(R.id.edit_text_name)
-        editTextName?.setText(scooter.name)
-
-        materialAlertDialogBuilder.setView(customAlertDialogView)
-            .setTitle(getString(R.string.dialog_update_title))
-            .setMessage(getString(R.string.dialog_update_message))
-            .setPositiveButton(getString(R.string.update_button)) { dialog, _ ->
-                val name = editTextName?.text.toString()
-                if (name.isNotEmpty()) {
-                    scooter.name = name
-                    scooter.timestamp = System.currentTimeMillis().toString()
-                    adapter.getRef(position).setValue(scooter)
-                }
-                dialog.dismiss()
-            }
-            .setNegativeButton(getString(R.string.cancel_button)) { dialog, _ ->
-                dialog.dismiss()
-            }
-            .show()
-    }
-
-    */
 
 }

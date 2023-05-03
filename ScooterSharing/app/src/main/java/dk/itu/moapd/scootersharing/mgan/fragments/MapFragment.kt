@@ -2,11 +2,6 @@ package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.Manifest
 import android.content.*
-import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.util.Log
@@ -15,12 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
 import androidx.core.content.PermissionChecker.checkSelfPermission
 import androidx.fragment.app.Fragment
-import com.firebase.geofire.GeoFireUtils
-import com.firebase.geofire.GeoLocation
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -30,8 +22,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.firebase.firestore.QuerySnapshot
 import dk.itu.moapd.scootersharing.mgan.R
@@ -40,6 +30,7 @@ import dk.itu.moapd.scootersharing.mgan.services.GeolocationService
 import java.text.SimpleDateFormat
 import java.util.*
 import com.google.maps.android.SphericalUtil;
+
 
 
 /**
@@ -252,7 +243,7 @@ class MapFragment : Fragment() {
                     val name = scooterSnapshot.child("name").value as String
                     val isused = scooterSnapshot.child("used").value as Boolean
 
-                    var scooterLocation : LatLng = LatLng(latitude,longitude)
+                    var scooterLocation = LatLng(latitude,longitude)
                     var distance = SphericalUtil.computeDistanceBetween(location, scooterLocation);
                     var tempDisText: String = String.format("%.2f meters", distance)
 

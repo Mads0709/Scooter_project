@@ -32,7 +32,6 @@ import java.util.Date
  * @property timestamp
  */
 data class Scooter (
-    //var key: String,
     var isUsed: Boolean? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
@@ -41,27 +40,4 @@ data class Scooter (
     var last_photo: String? = null
 
     )
-
-    /**
-     * A method that returns the scooter name and location
-     * @return a string representation of the name and location
-     */
-
-    /*
-    override fun toString(): String {
-        return "[Scooter] $name is placed at $location the timestamp is:." + toDate()
-    }
-
-    /**
-     * A function that converts a Date format to a SimpleDateFormat
-     * @return a string representation of a simple date format
-     */
-    fun toDate (): String {
-        var date2 = SimpleDateFormat("dd/MM/yy hh:mm a")
-        val netDate = Date(this.timestamp)
-        val date = date2.format(netDate)
-        return date
-    }
-
-     */
 

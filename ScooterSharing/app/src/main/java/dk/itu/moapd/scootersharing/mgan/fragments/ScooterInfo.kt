@@ -5,25 +5,20 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.wear.tiles.material.CircularProgressIndicator
-import dk.itu.moapd.scootersharing.mgan.R
-import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMapBinding
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentScooterInfoBinding
 import java.lang.Math.abs
-import java.lang.System.out
+
 
 class ScooterInfo : Fragment(), SensorEventListener {
 
     private lateinit var sensorManager: SensorManager
     private lateinit var linearAcceleration: Sensor
-    lateinit var progressBar: CircularProgressIndicator
 
     private val TAG = ScooterInfo::class.java.simpleName
 
@@ -53,11 +48,6 @@ class ScooterInfo : Fragment(), SensorEventListener {
         _binding = FragmentScooterInfoBinding.inflate(inflater, container, false)
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
     }
 
     //public class Accelerometer implements SensorEventListener { ...

@@ -1,15 +1,11 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.fragment.findNavController
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -21,21 +17,11 @@ import com.google.firebase.ktx.Firebase
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 
-
-
 class QRFragment : Fragment() {
-    private lateinit var materialAlertDialogBuilder: MaterialAlertDialogBuilder
     private lateinit var codeScanner: CodeScanner
     private val TAG = QRFragment::class.java.simpleName
 
     private lateinit var database: DatabaseReference
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-
-    }
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         database =

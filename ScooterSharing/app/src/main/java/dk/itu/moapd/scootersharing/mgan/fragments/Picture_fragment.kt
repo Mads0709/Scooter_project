@@ -1,6 +1,5 @@
 package dk.itu.moapd.scootersharing.mgan.fragments
 
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -8,10 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
@@ -42,17 +38,7 @@ class Picture_fragment : Fragment(), ItemClickListener {
         super.onCreate(savedInstanceState)
         database = FirebaseDatabase.getInstance().reference
 
-
-
     }
-
-
-
-
-
-
-
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -71,10 +57,6 @@ class Picture_fragment : Fragment(), ItemClickListener {
     ) { didTakePhoto ->
         updatePhoto(photoName)
         uploadPhotoToFirebaseStorage(photoName)
-
-
-
-
 
     }
     private var photoName: String? = null
@@ -116,10 +98,6 @@ class Picture_fragment : Fragment(), ItemClickListener {
                     binding.scooterPhoto.setImageBitmap(scaledBitmap)
                     binding.scooterPhoto.tag = photoFileName
                     uploadPhotoToFirebaseStorage(photoFileName)
-
-
-
-
 
                 }
             } else {

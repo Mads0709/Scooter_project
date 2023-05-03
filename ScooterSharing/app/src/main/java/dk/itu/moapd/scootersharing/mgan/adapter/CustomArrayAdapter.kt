@@ -61,9 +61,6 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
         }
 
     }
-
-
-
     override fun onCreateViewHolder(parent: ViewGroup,
                                     viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -85,14 +82,4 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
     }
 
 
-
-
-
-    //override fun getItemCount() = data.getRidesList().size
-    /*override fun onBindViewHolder(holder: ViewHolder,
-                                  position: Int) {
-        val scooter = data.getRidesList()[position]
-        holder.bind(scooter)
-    }
-    */
 }

@@ -14,8 +14,7 @@ import java.util.*
 
 
 /*
-This CODE is inspired from https://github.com/android/location-samples/blob/432d3b72b8c058f220416958b444274ddd186abd/LocationUpdatesForegroundService/app/src/main/java/com/google/android/gms/location/sample/locationupdatesforegroundservice/LocationUpdatesService.java
-by frankgh
+This CODE is inspired from Max-Emil Thorius (maxt)
  */
 class GeolocationService : Service() {
     /**
@@ -30,26 +29,7 @@ class GeolocationService : Service() {
 
     private var updateFunc: (Double, Double, String) -> Unit = {_: Double, _: Double, _: String -> }
     companion object {
-        private const val PACKAGENAME = "dk.itu.moapd.scootersharing.mgan.services"
-        val EXTRA_LOCATION: String = PACKAGENAME + ".location"
-
-        val ACTION_BROADCAST: String = PACKAGENAME + ".broadcast"
-
-        private const val  EXTRA_STARTED_FROM_NOTIFICATION: String = PACKAGENAME + ".started_from_notification";
         val TAG = GeolocationService::class.java.simpleName
-        private const val KEY_REQUESTING_LOCATION_UPDATES = "requesting location updates"
-
-
-        /**
-         * The desired interval for location updates. Inexact. Updates may be more or less frequent.
-         */
-        private val UPDATE_INTERVAL_IN_MILLISECONDS: Long = 10000
-
-        /**
-         * The fastest rate for active location updates. Updates will never be more frequent
-         * than this value.
-         */
-        private val FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2
 
     }
     override fun onBind(intent: Intent?): IBinder? {
