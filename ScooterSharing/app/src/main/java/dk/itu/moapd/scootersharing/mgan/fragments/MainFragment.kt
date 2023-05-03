@@ -45,7 +45,6 @@ import com.google.firebase.storage.ktx.storage
 import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.LoginActivity
 import dk.itu.moapd.scootersharing.mgan.adapter.CustomArrayAdapter
-import dk.itu.moapd.scootersharing.mgan.activites.mgan.RidesDB
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentMainBinding
@@ -195,17 +194,6 @@ class MainFragment : Fragment(), ItemClickListener {
         super.onViewCreated(view, savedInstanceState)
 
             with (binding){
-                mainStartRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_startRideFragment)
-                }
-
-                mainUpdateRideButton.setOnClickListener{
-                    //findNavController().navigate(R.id.action_mainFragment_to_updateRideFragment)
-                }
-                mainDeleteRideButton.setOnClickListener{
-                    findNavController().navigate(R.id.action_mainFragment_to_deleteRideFragment)
-                }
-
                 signOutButton.setOnClickListener{
                     auth.signOut()
                     startLoginActivity()
@@ -231,8 +219,6 @@ class MainFragment : Fragment(), ItemClickListener {
                     findNavController().navigate(R.id.action_mainFragment_to_fragmentListScooters)
 
                 }
-                binding.recyclerView.layoutManager = LinearLayoutManager(requireContext())
-                binding.recyclerView.adapter = adapter
             }
     }
 

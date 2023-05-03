@@ -75,5 +75,6 @@ class ListScootersFragment : Fragment(), ItemClickListener {
     override fun onItemClickListener(dummy: Scooter, position: Int) {
         TODO("Not yet implemented")
     }
+
 }
 

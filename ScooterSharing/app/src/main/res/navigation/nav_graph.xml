@@ -9,12 +9,6 @@
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.MainFragment"
         android:label="MainFragment" >
         <action
-            android:id="@+id/action_mainFragment_to_startRideFragment"
-            app:destination="@id/startRideFragment" />
-        <action
-            android:id="@+id/action_mainFragment_to_deleteRideFragment"
-            app:destination="@id/deleteRideFragment" />
-        <action
             android:id="@+id/action_mainFragment_to_fragmentListScooters"
             app:destination="@id/fragmentListScooters" />
         <action
@@ -31,23 +25,6 @@
             app:destination="@id/fragmentScooterInfo" />
     </fragment>
 
-    <fragment
-        android:id="@+id/startRideFragment"
-        android:name="dk.itu.moapd.scootersharing.mgan.fragments.StartRideFragment"
-        android:label="StartRideFragment"/>
-    <fragment
-        android:id="@+id/updateRideFragment"
-        android:name="dk.itu.moapd.scootersharing.mgan.fragments.UpdateRideFragment"
-        android:label="UpdateRideFragment"
-        />
-    <fragment
-        android:id="@+id/deleteRideFragment"
-        android:name="dk.itu.moapd.scootersharing.mgan.fragments.DeleteRideFragment"
-        android:label="DeleteRideFragment">
-        <action
-            android:id="@+id/action_deleteRideFragment_to_mainFragment"
-            app:destination="@id/mainFragment" />
-    </fragment>
     <fragment
         android:id="@+id/fragmentListScooters"
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.ListScootersFragment"
@@ -68,7 +45,11 @@
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.QRFragment"
         android:label="QRFragment"
 
-        />
+        >
+        <action
+            android:id="@+id/action_fragmentQR_to_mainFragment2"
+            app:destination="@id/mainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentScooterInfo"
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.ScooterInfo"
