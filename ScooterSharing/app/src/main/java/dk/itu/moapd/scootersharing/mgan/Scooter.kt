@@ -32,7 +32,7 @@ import java.util.Date
  * @property timestamp
  */
 data class Scooter (
-    var isUsed: Boolean? = null,
+    var used: Boolean? = null,
     var latitude: Double? = null,
     var longitude: Double? = null,
     var name : String? = null,

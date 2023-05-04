@@ -58,12 +58,12 @@ class MapFragment : Fragment() {
                     val latitude = scooterSnapshot.child("latitude").value as Double
                     val longitude = scooterSnapshot.child("longitude").value as Double
                     val name = scooterSnapshot.child("name").value as String
-                    val isused = scooterSnapshot.child("used").value as Boolean
+                    val used = scooterSnapshot.child("used").value as Boolean
 
                     // Create a LatLng object and add a marker to the map
                     val location = LatLng(latitude, longitude)
 
-                    if (!isused)
+                    if (!used)
                         map?.addMarker(MarkerOptions().position(location).title(name))
                 }
             }

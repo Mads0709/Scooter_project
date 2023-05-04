@@ -46,11 +46,13 @@ class ListScootersFragment : Fragment(), ItemClickListener {
 
         auth.currentUser?.let {
             val query = database.child("scooters")
-                .orderByChild("createdAt")
+                .orderByChild("used")
+                .equalTo(false)
             val options = FirebaseRecyclerOptions.Builder<Scooter>()
                 .setQuery(query, Scooter::class.java)
                 .setLifecycleOwner(this)
                 .build()
+
             //Create the custom adapter to populate the adapter
             adapter = CustomArrayAdapter(this, options)
         }

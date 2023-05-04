@@ -42,7 +42,7 @@ class QRFragment : Fragment() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
                                 val scooter = snapshot.children.first().getValue(Scooter::class.java)
-                                if(!scooter?.isUsed!!){
+                                if(!scooter?.used!!){
                                     if (scooter != null) {
                                         Log.d(TAG, "Retrieved scooter data: $scooter")
                                         scooterRef.setValue(scooter)
@@ -52,12 +52,12 @@ class QRFragment : Fragment() {
                                             .setMessage(getString(R.string.start_ride_dialog_support) + " " + scooterName)
                                             .setNeutralButton(getString(R.string.start_ride_cancel)) { dialog, which ->
                                                 findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
-                                                scooter.isUsed = false
+                                                scooter.used = false
                                                 scooterRef.setValue(scooter)
                                             }
                                             .setPositiveButton(getString(R.string.start_ride_confirm)) { dialog, which ->
                                                 findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
-                                                scooter.isUsed = true
+                                                scooter.used = true
                                                 scooterRef.setValue(scooter)
                                             }
                                             .show()
@@ -73,7 +73,7 @@ class QRFragment : Fragment() {
                                         }
                                         .show()
                                     //Remove after!!!!!!!
-                                    scooter.isUsed = false
+                                    scooter.used = false
                                     scooterRef.setValue(scooter)
                                 }
 
