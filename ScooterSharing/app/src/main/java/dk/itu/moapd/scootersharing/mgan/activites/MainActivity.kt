@@ -102,7 +102,7 @@ class MainActivity : AppCompatActivity() {
         when (requestCode) {
             dk.itu.moapd.scootersharing.mgan.activites.CAMERA_REQUEST_CODE -> {
                 if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "You need to ask for permission", Toast.LENGTH_SHORT)
+
 
                 }
             }
