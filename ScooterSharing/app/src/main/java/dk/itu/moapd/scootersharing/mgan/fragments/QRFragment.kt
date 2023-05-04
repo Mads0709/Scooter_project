@@ -2,10 +2,10 @@ package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.CodeScannerView
@@ -46,19 +46,24 @@ class QRFragment : Fragment() {
                                     if (scooter != null) {
                                         Log.d(TAG, "Retrieved scooter data: $scooter")
                                         scooterRef.setValue(scooter)
+
                                         Log.d(TAG,  "Scooter is now used: $scooter")
                                         MaterialAlertDialogBuilder(requireActivity())
                                             .setTitle(getString(R.string.start_ride_dialog_title))
                                             .setMessage(getString(R.string.start_ride_dialog_support) + " " + scooterName)
                                             .setNeutralButton(getString(R.string.start_ride_cancel)) { dialog, which ->
-                                                findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
+                                                findNavController().navigate(R.id.action_fragmentQR_to_fragmentPicture)
                                                 scooter.used = false
                                                 scooterRef.setValue(scooter)
                                             }
                                             .setPositiveButton(getString(R.string.start_ride_confirm)) { dialog, which ->
-                                                findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
                                                 scooter.used = true
                                                 scooterRef.setValue(scooter)
+                                                val args = Bundle()
+                                                args.putString("scooters", scooterName)
+                                                findNavController().navigate(R.id.action_fragmentQR_to_fragmentPicture, args)
+
+                                                Log.d(TAG, "debug name of the scooter is args ${args.getString("scooters")}")
                                             }
                                             .show()
                                     }
@@ -72,9 +77,6 @@ class QRFragment : Fragment() {
                                             findNavController().navigate(R.id.action_fragmentQR_to_mainFragment)
                                         }
                                         .show()
-                                    //Remove after!!!!!!!
-                                    scooter.used = false
-                                    scooterRef.setValue(scooter)
                                 }
 
                             } else {

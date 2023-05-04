@@ -2,23 +2,33 @@ package dk.itu.moapd.scootersharing.mgan.fragments
 
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RequiresApi
 import androidx.core.content.FileProvider
 import androidx.core.view.doOnLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import dk.itu.moapd.scootersharing.mgan.R
 import dk.itu.moapd.scootersharing.mgan.activites.mgan.Scooter
 import dk.itu.moapd.scootersharing.mgan.adapter.ItemClickListener
 import dk.itu.moapd.scootersharing.mgan.databinding.FragmentPictureFragmentBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 import java.io.File
 import java.io.FileInputStream
 import java.util.*
@@ -48,6 +58,8 @@ class Picture_fragment : Fragment(), ItemClickListener {
 
         scooter?.last_photo = photoName
 
+
+
         return binding.root
     }
 
@@ -63,9 +75,16 @@ class Picture_fragment : Fragment(), ItemClickListener {
     private var scooter: Scooter? = null
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        photoName = "IMG_${Date()}.JPG"
+        with(binding){
+         backButton.setOnClickListener {
+             findNavController().navigate(R.id.action_fragmentPicture_to_mainFragment)
+         }
+        }
+        val scooterName = arguments?.getString("scooters")
+        photoName = "$scooterName.jpg"
         val photoFile = File(
             requireContext().applicationContext.filesDir,
             photoName
@@ -76,9 +95,25 @@ class Picture_fragment : Fragment(), ItemClickListener {
             photoFile
         )
         takePhoto.launch(photoUri)
-        updatePhoto(photoName)
+        updatePhoto(scooter?.last_photo)
+
+
         uploadPhotoToFirebaseStorage(scooter?.last_photo)
-        database.child("scooters").child("CPH1").child("last_photo").setValue(photoName)
+
+        Log.d("", "the name of the scooter is ${scooterName}")
+
+
+        if (scooterName != null) {
+            database.child("scooters").child(scooterName).child("used").setValue(false)
+            val currentDateTime = LocalDateTime.now()
+            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+            val formattedDateTime = currentDateTime.format(formatter)
+
+            var dateString = "$formattedDateTime"
+            database.child("scooters").child(scooterName).child("timestamp").setValue(dateString)
+        }
+
+
 
     }
 
@@ -97,6 +132,7 @@ class Picture_fragment : Fragment(), ItemClickListener {
                     binding.scooterPhoto.setImageBitmap(scaledBitmap)
                     binding.scooterPhoto.tag = photoFileName
                     uploadPhotoToFirebaseStorage(photoFileName)
+
 
                 }
             } else {
@@ -141,7 +177,8 @@ class Picture_fragment : Fragment(), ItemClickListener {
         // Check if the photo file exists
         if (photoFile?.exists() == true) {
             // Create a reference to the Firebase Storage bucket where you want to store the photo
-            val storageRef = storage.reference.child("scooters/").child("name")
+
+            val storageRef = storage.reference.child("scooters/").child(photoFileName)
             // Create an InputStream from the photo file
             val stream = FileInputStream(photoFile)
             // Upload the photo to Firebase Storage

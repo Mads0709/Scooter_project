@@ -39,7 +39,14 @@
         android:id="@+id/fragmentPicture"
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.Picture_fragment"
         android:label="PictureFragment"
-        />
+        >
+        <argument
+            android:name="scooters"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_fragmentPicture_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
     <fragment
         android:id="@+id/fragmentQR"
         android:name="dk.itu.moapd.scootersharing.mgan.fragments.QRFragment"
@@ -49,6 +56,9 @@
         <action
             android:id="@+id/action_fragmentQR_to_mainFragment2"
             app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_fragmentQR_to_fragmentPicture"
+            app:destination="@id/fragmentPicture" />
     </fragment>
     <fragment
         android:id="@+id/fragmentScooterInfo"

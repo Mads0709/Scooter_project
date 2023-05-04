@@ -44,7 +44,7 @@ class CustomArrayAdapter(private val itemClickListener: ItemClickListener,
 
             // Get the public thumbnail URL.
             val storage = Firebase.storage("gs://moapd-2023-e061c.appspot.com")
-            val imageRef = storage.reference.child("scooters/").child("name")
+            val imageRef = storage.reference.child("scooters/").child("${scooter.name}.jpg")
 
 
             // Download and set an image into the ImageView.
